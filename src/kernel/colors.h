@@ -1,0 +1,21 @@
+#ifndef COLORS_H
+#define COLORS_H
+
+#define BLACK            0x00
+#define BLUE             0x01
+#define GREEN            0x02
+#define CYAN             0x03
+#define RED              0x04
+#define MAGENTA          0x05
+#define BROWN            0x06
+#define LIGHT_GREY       0x07
+#define DARK_GREY        0x08
+#define LIGHT_BLUE       0x09
+#define LIGHT_GREEN      0x10
+#define LIGHT_CYAN       0x11
+#define LIGHT_RED        0x12
+#define LIGHT_MAGENTA    0x13
+#define LIGHT_BROWN      0x14
+#define WHITE            0x0f
+
+#endif // COLORS_H
