@@ -16,9 +16,9 @@ typedef uint32_t size_t;
 #define NULL                    0L
 
 // Screen constants
-#define LINES 25
-#define COLUMNS_IN_LINE 80
-#define BYTES_EACH_ELEMENT 2
-#define SCREENSIZE BYTES_EACH_ELEMENT * COLUMNS_IN_LINE * LINES
+#define LINES (uint8_t) 25
+#define COLUMNS_IN_LINE (uint8_t) 80
+#define BYTES_EACH_ELEMENT (uint8_t) 2
+#define SCREENSIZE (uint16_t) (BYTES_EACH_ELEMENT * COLUMNS_IN_LINE * LINES)
 
 #endif
