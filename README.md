@@ -1,16 +1,49 @@
 # BasicOS
-**BasicOS** is a very simple operating system written in Assembly x86 and C for educational purposes.
 
-## Features/Functions
+**BasicOS** is a minimalistic ["operating system"](https://en.wikipedia.org/wiki/Kernel_(operating_system)) developed in Assembly x86 (NASM) and C99, designed for educational purposes.
 
-- Multi-stage bootloader
-- Basic I/O from PS2 port and serial port
+![Kernel_Startup](./files/kernel.png)
+
+## Features
+
+- **Bootloader**: Includes a 32KB stack.
+- **Input**: Basic keyboard input functionality.
+- **Output**: Basic screen output functionality.
+
+## Todo
+
+- Implement a shell with built-in commands.
 
 ## Building and Running
 
-1. **Build Toolchain**:
-   - Make sure you have NASM, GCC, and LD installed.
-   - To build, run `make` in a terminal.
+### Prerequisites
 
-2. **Running with QEMU (Recommended)**:
-   - Execute the following command: `make run`.
+Ensure you have the following tools installed:
+- NASM (Netwide Assembler)
+- GCC (GNU Compiler Collection)
+- LD (GNU Linker)
+
+### Build Instructions
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/iyksh/basicOS && cd basicOS
+   ```
+
+2. Build the project:
+   ```bash
+   make
+   ```
+
+3. Running with QEMU (Recommended): 
+   ```bash
+   make run
+   ```
+
+## Contributing
+
+Contributions are welcome! Please submit a pull request or open an issue to discuss your ideas.
+
+## License
+
+This project is licensed under the GPL3 License. See the [LICENSE](LICENSE) file for details.
