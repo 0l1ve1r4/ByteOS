@@ -2,12 +2,15 @@
 #include "colors.h"
 #include "kernel.h"
 #include "keyboard.h"
+#include "kstdlib.h"
 
 static int8_t *vidptr = (int8_t*) VIDEO_ADDRESS;    // video memory begins here
 uint32_t current_loc = 0;                           // current location on the screen
 
 void kmain(void){
-    const char *boot_str = " _Welcome to the _       ___  ____  \n"
+    initialize_heap();
+
+    const char *boot_str = " _               _       ___  ____  \n"
                         "| |__   __ _ ___(_) ___ / _ \\/ ___| \n"
                         "| '_ \\ / _` / __| |/ __| | | \\___ \\ \n"
                         "| |_) | (_| \\__ \\ | (__| |_| |___) |\n"
@@ -20,10 +23,19 @@ void kmain(void){
     idt_init();
     kb_init();
     
+    char* test = kmalloc(sizeof(5));
+    test[0] = 'h';
+    test[1] = 'e';
+    test[2] = 'a';
+    test[3] = 'p';
+    test[4] = '\0';
+    kprint(test);
+
+
     while (1);
 }
 
-
+// this functions needs to be here because uses vidptr
 void keyboard_handler_main(void) {
 	uint8_t status;
 	char keycode;
@@ -46,20 +58,17 @@ void keyboard_handler_main(void) {
 	}
 }
 
-
-
-void kclear(void){
-  uint32_t j = 0;
-  while (j < COLUMNS_IN_LINE * LINES * BYTES_EACH_ELEMENT){
-    vidptr[j] = ' ';                  // blank character
-    vidptr[j+1] = LIGHT_GREY;
-    j = j + 2;
-  }
-  return;
+void kclear(void) {
+    uint32_t j = 0;
+    while (j < COLUMNS_IN_LINE * LINES * BYTES_EACH_ELEMENT){
+        vidptr[j] = ' '; 
+        vidptr[j+1] = LIGHT_GREY;
+        j = j + 2;
+    }
+    return;
 }
 
-void kprint(const char *str)
-{
+void kprint(const char *str) {
 	unsigned int i = 0;
 	while (str[i] != '\0') {
         if (str[i] == '\n') {
@@ -68,7 +77,7 @@ void kprint(const char *str)
             continue;
         }
 		vidptr[current_loc++] = str[i++];
-		vidptr[current_loc++] = 0x07;
+		vidptr[current_loc++] = LIGHT_GREY;
 	}
 }
 

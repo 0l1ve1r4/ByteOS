@@ -1,49 +1,55 @@
 bits 32                         ; NASM directive to set 32-bit mode
+
 section .text 
-        align 4
-        dd 0x1BADB002        
-        dd 0x00                   
-        dd - (0x1BADB002 + 0x00)   
+    align 4
+    dd 0x1BADB002              ; Multiboot header magic number
+    dd 0x00                    ; Multiboot flags
+    dd - (0x1BADB002 + 0x00)   ; Multiboot checksum
 
-; functions defined in c files  ;
-global start                    ; 
-global keyboard_handler         ; 
-global read_port                ;
-global write_port               ;
-global load_idt                 ;
-                                
-; C functions                   ;
-extern kmain 	                ; kernel.c      
-extern keyboard_handler_main    ; keyboard.c
+; Functions definied here
+global start                    ; Entry point for the kernel
+global keyboard_handler         ; Keyboard interrupt handler
+global read_port                ; Function to read from a port
+global write_port               ; Function to write to a port
+global load_idt                 ; Function to load the IDT
 
-; Functions 
+; Functions defined in C files
+extern kmain                    ; Main kernel function
+extern keyboard_handler_main    ; Main keyboard handler function
+
+; Read from port function
 read_port:
-	mov edx, [esp + 4]      ;al is the lower 8 bits of eax
-	in al, dx	        ;dx is the lower 16 bits of edx
-	ret
+    mov edx, [esp + 4]          ; Load port address from stack
+    in al, dx                   ; Read from port into AL
+    ret                         ; Return
 
+; Write to port function
 write_port:
-	mov   edx, [esp + 4]    
-	mov   al, [esp + 4 + 4]  
-	out   dx, al  
-	ret
+    mov edx, [esp + 4]          ; Load port address from stack
+    mov al, [esp + 8]           ; Load value to write from stack
+    out dx, al                  ; Write value to port
+    ret                         ; Return
 
+; Load IDT function
 load_idt:
-	mov edx, [esp + 4]
-	lidt [edx]
-	sti                     ;turn on interrupts
-	ret
+    mov edx, [esp + 4]          ; Load pointer to IDT from stack
+    lidt [edx]                  ; Load the IDT
+    sti                         ; Enable interrupts
+    ret                         ; Return
 
-keyboard_handler:                 
-	call    keyboard_handler_main
-	iretd
+; Keyboard interrupt handler
+keyboard_handler:
+    call keyboard_handler_main  ; Call the C handler function
+    iretd                       ; Return from interrupt
 
+; Kernel entry point
 start:
-	cli 				
-	mov esp, stack_space
-	call kmain
-	hlt 			
+    cli                         ; Disable interrupts
+    mov esp, stack_space + 32768 ; Initialize stack pointer
+    call kmain                  ; Call the main kernel function
+    hlt                         ; Halt the CPU
 
 section .bss
-resb 32768                      ; 32KB for stack
+    align 4                     ; Align the stack space
+    resb 32768                  ; Reserve 32KB for stack
 stack_space:

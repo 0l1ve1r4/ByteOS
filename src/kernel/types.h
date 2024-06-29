@@ -9,7 +9,9 @@ typedef signed char             int8_t;
 typedef signed short int        int16_t;
 typedef signed int              int32_t;
 
+typedef uint8_t                 bool;   
 typedef uint32_t size_t;
+
 
 #define TRUE                    (uint8_t) 1
 #define FALSE                   (uint8_t) 0
@@ -20,5 +22,9 @@ typedef uint32_t size_t;
 #define COLUMNS_IN_LINE (uint8_t) 80
 #define BYTES_EACH_ELEMENT (uint8_t) 2
 #define SCREENSIZE (uint16_t) (BYTES_EACH_ELEMENT * COLUMNS_IN_LINE * LINES)
+
+#define MAX_UINT32 0xFFFFFFFF
+#define MAX_UINT16 0xFFFF
+#define MAX_UINT8 0xFF
 
 #endif
