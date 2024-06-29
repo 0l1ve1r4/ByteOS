@@ -1,9 +1,9 @@
 #ifndef KSTDLIB_H
 #define KSTDLIB_H
 
-#include "types.h"
+#include "../types.h"
 
-#define HEAP_SIZE 1024 * 1024               // 1MB heap  
+#define HEAP_SIZE (1024 * 1024) * 10               // 1MB heap  
 
 typedef struct block_header {
     size_t size;
@@ -11,9 +11,8 @@ typedef struct block_header {
     struct block_header* next;
 } block_header_t;
 
-void initialize_heap(void); 
+void heap_init(void); 
 void* kmalloc(size_t size);
 void kfree(void* ptr);
-
 
 #endif // KSTDLIB_H

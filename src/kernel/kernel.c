@@ -1,61 +1,72 @@
-#include "types.h"
-#include "colors.h"
 #include "kernel.h"
-#include "keyboard.h"
-#include "kstdlib.h"
 
-static int8_t *vidptr = (int8_t*) VIDEO_ADDRESS;    // video memory begins here
-uint32_t current_loc = 0;                           // current location on the screen
+uint32_t current_loc = 0;                   // current location on the screen
+uint32_t buffer_index = 0;                  // index for the input buffer
 
+int8_t *vidptr = (int8_t*) VIDEO_ADDRESS;   // video memory begins here
+char input_buffer[BUFFER_SIZE];             // buffer to store input characters
+
+// ==================== KERNEL ====================
 void kmain(void){
-    initialize_heap();
-
-    const char *boot_str = " _               _       ___  ____  \n"
-                        "| |__   __ _ ___(_) ___ / _ \\/ ___| \n"
-                        "| '_ \\ / _` / __| |/ __| | | \\___ \\ \n"
-                        "| |_) | (_| \\__ \\ | (__| |_| |___) |\n"
-                        "|_.__/ \\__,_|___/_|\\___|\\___/|____/ \n"
-                        "A simple x86 kernel written from scratch!\n\n";
-    kclear();
-    kprint(boot_str);
- 
-    kprint("root@kernel:~# ");
+    heap_init(); 
     idt_init();
     kb_init();
-    
-    char* test = kmalloc(sizeof(5));
-    test[0] = 'h';
-    test[1] = 'e';
-    test[2] = 'a';
-    test[3] = 'p';
-    test[4] = '\0';
-    kprint(test);
+    kshell_init();
 
+    kshell(NULL);
 
     while (1);
 }
 
+// ==================== VIDEO OUTPUT ====================
+
 // this functions needs to be here because uses vidptr
 void keyboard_handler_main(void) {
-	uint8_t status;
-	char keycode;
+    uint8_t status;
+    char keycode;
 
-	write_port(0x20, 0x20); // Write EOI
+    write_port(0x20, 0x20); // Write EOI
 
-	status = read_port(KEYBOARD_STATUS_PORT);
-	if (status & 0x01) {
-		keycode = read_port(KEYBOARD_DATA_PORT);
-		if(keycode < 0)
-			return;
+    status = read_port(KEYBOARD_STATUS_PORT);
+    if (status & 0x01) {
+        keycode = read_port(KEYBOARD_DATA_PORT);
+        if (keycode < 0)
+            return;
 
-		if(keycode == ENTER_KEY_CODE) {
-			kprint_nl();
-			return;
-		}
+        switch (keycode) {
+            case ENTER_KEY_CODE:
+                input_buffer[buffer_index] = '\0';            
+                kshell(input_buffer); 
 
-		vidptr[current_loc++] = keyboard_map[(unsigned char) keycode];
-		vidptr[current_loc++] = 0x07;
-	}
+                // Clear the input buffer
+                buffer_index = 0;
+                input_buffer[0] = '\0';
+                break;
+
+            case BACKSPACE_KEY_CODE:
+                if (buffer_index > 0) {
+                    buffer_index--;
+                    input_buffer[buffer_index] = '\0';
+
+                    if (current_loc > 0) {
+                        current_loc -= BYTES_EACH_ELEMENT;
+                        vidptr[current_loc] = ' ';
+                        vidptr[current_loc + 1] = LIGHT_GREEN;
+                    }
+                }
+                break;
+
+            default:
+                if (buffer_index < BUFFER_SIZE - 1) {
+                    uint8_t character = keyboard_map[(uint8_t)keycode];
+                    input_buffer[buffer_index++] = character;
+
+                    vidptr[current_loc++] = character;
+                    vidptr[current_loc++] = 0x07;
+                }
+                break;
+        }
+    }
 }
 
 void kclear(void) {
@@ -69,19 +80,23 @@ void kclear(void) {
 }
 
 void kprint(const char *str) {
-	unsigned int i = 0;
-	while (str[i] != '\0') {
+    if (str == NULL || sizeof(str) == 0){
+        return;
+    }
+    
+    uint32_t i = 0;
+    while (str[i] != '\0') {
         if (str[i] == '\n') {
             kprint_nl();
             i++;
             continue;
         }
-		vidptr[current_loc++] = str[i++];
-		vidptr[current_loc++] = LIGHT_GREY;
-	}
+        vidptr[current_loc++] = str[i++];
+        vidptr[current_loc++] = LIGHT_GREY;
+    }
 }
 
 void kprint_nl(void) {
-	uint32_t line_size = BYTES_EACH_ELEMENT * COLUMNS_IN_LINE;
-	current_loc = current_loc + (line_size - current_loc % (line_size));
+    uint32_t line_size = BYTES_EACH_ELEMENT * COLUMNS_IN_LINE;
+    current_loc = current_loc + (line_size - current_loc % (line_size));
 }

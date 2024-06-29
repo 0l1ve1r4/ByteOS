@@ -21,10 +21,16 @@ typedef uint32_t size_t;
 #define LINES (uint8_t) 25
 #define COLUMNS_IN_LINE (uint8_t) 80
 #define BYTES_EACH_ELEMENT (uint8_t) 2
+#define LINE_SIZE (uint16_t) (COLUMNS_IN_LINE * BYTES_EACH_ELEMENT)
 #define SCREENSIZE (uint16_t) (BYTES_EACH_ELEMENT * COLUMNS_IN_LINE * LINES)
 
 #define MAX_UINT32 0xFFFFFFFF
 #define MAX_UINT16 0xFFFF
 #define MAX_UINT8 0xFF
+#define BUFFER_SIZE 256 
+
+#define KB (uint32_t) 1024
+#define MB (uint32_t) 1024 * 1024
+#define GB (uint32_t) 1024 * 1024 * 1024
 
 #endif

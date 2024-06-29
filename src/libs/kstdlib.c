@@ -3,7 +3,7 @@
 static uint8_t heap[HEAP_SIZE];
 static block_header_t* free_list = (block_header_t*)heap;
 
-void initialize_heap(void) {
+void heap_init(void) {
     free_list->size = HEAP_SIZE - sizeof(block_header_t);
     free_list->free = 1;
     free_list->next = NULL;
