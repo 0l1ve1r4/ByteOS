@@ -11,11 +11,11 @@
 #define LIGHT_GREY       0x07
 #define DARK_GREY        0x08
 #define LIGHT_BLUE       0x09
-#define LIGHT_GREEN      0x10
-#define LIGHT_CYAN       0x11
-#define LIGHT_RED        0x12
-#define LIGHT_MAGENTA    0x13
-#define LIGHT_BROWN      0x14
-#define WHITE            0x0f
+#define LIGHT_GREEN      0x0A
+#define LIGHT_CYAN       0x0B
+#define LIGHT_RED        0x0C
+#define LIGHT_MAGENTA    0x0D
+#define LIGHT_BROWN      0x0E
+#define WHITE            0x0F
 
 #endif // COLORS_H

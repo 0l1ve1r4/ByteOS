@@ -1,24 +1,30 @@
-# BasicOS
+# BasicOS - literally basic
 
-**BasicOS** is a minimalistic ["operating system"](https://en.wikipedia.org/wiki/Kernel_(operating_system)) developed in Assembly x86 (NASM) and C99, designed for educational purposes.
+**BasicOS** is a lightweight operating system developed in Assembly x86 (NASM) and C99, tailored for educational purposes.
+
+---
 
 ![Kernel_Startup](./files/kernel.png)
 
 ## Features
 
 - **Bootloader**: Includes a 32KB stack.
+- **Heap managment**: Malloc and free features.
 - **Input**: Basic keyboard input functionality.
-- **Output**: Basic screen output functionality.
+- **Output**: Simple screen output functionality.
 
-## Todo
+## Built-in Libraries
 
-- Implement a shell with built-in commands.
+- **kstdio.h**: Input/output operations.
+- **kstring.h**: String manipulation utilities.
+- **kstdlib.h**: Memory and heap management functions, including shutdown (exit).
+- **kshell.h**: Basic shell with built-in commands.
 
 ## Building and Running
 
 ### Prerequisites
 
-Ensure you have the following tools installed:
+Make sure you have the following tools installed:
 - NASM (Netwide Assembler)
 - GCC (GNU Compiler Collection)
 - LD (GNU Linker)
@@ -35,15 +41,17 @@ Ensure you have the following tools installed:
    make
    ```
 
-3. Running with QEMU (Recommended): 
+3. Running with QEMU (Recommended):
    ```bash
    make run
    ```
 
 ## Contributing
 
-Contributions are welcome! Please submit a pull request or open an issue to discuss your ideas.
+Contributions are welcome! Feel free to submit a pull request or open an issue to discuss your ideas.
 
 ## License
 
-This project is licensed under the GPL3 License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the GPL3 License. See the [LICENSE](LICENSE) file for more details.
+
+---
