@@ -1,3 +1,2 @@
-kasm.o 
-kc.o 
+/*.o 
 kernel-0.0.1

@@ -1,54 +1,121 @@
+// This file is part of basicOS.
+// Copyright (C) 2024 Guilherme Oliveira Santos
+
+// This is free software: you can redistribute it and/or modify it 
+// under the terms of the GNU GPL3 or (at your option) any later version.
+
+// This program is distributed in hope that it will be useful, but 
+// WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+// or FITNESS FOR A PARTICULAR PURPOSE. See at LICENSE file for more details.
+
+// Kernel shell implementation, based on this tutorial:
+// https://brennan.io/2015/01/16/write-a-shell-in-c/
+
 #include "kshell.h"
 #include "kstdlib.h"
 #include "kstring.h"
+#include "kstdio.h"
 
-// Implemented at src/kernel/kernel.c
-extern void kclear(void);
-extern void kprint(const char *str);
-extern void kprint_nl(void);
-
+// Clear the screen and show the OS prompt
 void kshell_init(void) {
     kclear();
-    kprint(OS_PROMPT);
+    printf(OS_PROMPT);
+    printf(SHELL_PROMPT);
+} 
+
+char* builtin_str[] = {
+    "exit",
+    "echo",
+    "clear",
+    "help",
+    "status"
+};
+
+char* builtin_desc[] = {
+    "Shutdown the kernel",
+    "Echo the input",
+    "Clear the screen",
+    "Show this help message",
+    "Show the status of the system"
+};
+
+void (*builtin_func[]) (char**) = {
+    &shell_exit,
+    &shell_echo,
+    &shell_clear,
+    &shell_help,
+    &shell_status
+
+};
+
+size_t num_builtins() {
+    return sizeof(builtin_str) / sizeof(char *);
 }
 
-void kshell(const char* command) {
-    kprint_nl();
-    
-    if (command == NULL || sizeof(command) == 0) {
-        // Do nothing =)
+void kshell(char* command) {
+    printf("\n");
+    char** args = split(command, ' ');
+    command = args[0];
+    char** arguments = args + 1;    
+
+    uint8_t i = 0, status = EXIT_FAILURE;
+    for (i = 0; i < num_builtins(); i++) {
+        if (strcmp(command, builtin_str[i]) == 0) {
+            (*builtin_func[i])(arguments);
+            status = EXIT_SUCCESS;
+        }
     }
 
-    else if (strcmp(command, "exit") == 0){
-        kprint("Exiting kernel...");
-        power_off();
+    if (status == EXIT_FAILURE && strcmp(command, "") != 0){
+        printf("Command not found: ");
+        printf(command);
     }
 
-    else if (strcmp(command, "echo") == 0){
-            kprint("echo");
-    }
-
-    else if (strcmp(command, "clear") == 0){
-        kclear();
-    }
-
-    else if (strcmp(command, "help") == 0){
-        kprint("Available commands:");
-        kprint_nl();
-        kprint("  - exit: Shutdown the kernel");
-        kprint_nl();
-        kprint("  - clear: Clear the screen");
-        kprint_nl();
-        kprint("  - help: Show this help message");
-    }
-    
-    else {
-        kprint("Command: [");
-        kprint(command);
-        kprint("] not found.");
-    }
-
-    kprint_nl();
-    kprint(SHELL_PROMPT);
+    printf("\n");
+    printf(SHELL_PROMPT);
 
 }
+
+// There are some unused parameters in the functions below
+// This is because the functions are pointers to functions
+// and they need to have the same signature
+
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+
+void shell_exit(char** args) {
+    power_off();
+}
+
+void shell_echo(char** args) {
+    while (*args) {
+        printf("%s ", *args);
+        args++;
+    }
+}
+
+void shell_clear(char** args) {
+    kclear();
+}
+
+void shell_help(char** args){
+    uint8_t description = strcmp(args[0], "-d");
+    description == 0 ? printf("Available commands:\n") : printf("Available commands (use -d to show more):\n");    
+    printf("\n");
+    
+    for (uint8_t i = 0; i < num_builtins(); i++) {
+        printf("| %s", builtin_str[i]);
+        
+        if (!description) {
+            printf(" | %s", builtin_desc[i]);
+        }
+        printf("\n");
+    }
+}
+
+void shell_status(char** args){
+    char* str = (char*)malloc(sizeof(char));
+    sprintf(str, "Heap: %d/%d", get_heap_used(), get_heap_size());
+    printf("%s\n", str);
+}
+
+#pragma GCC diagnostic pop

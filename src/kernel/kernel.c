@@ -1,3 +1,13 @@
+// This file is part of basicOS.
+// Copyright (C) 2024 Guilherme Oliveira Santos
+
+// This is free software: you can redistribute it and/or modify it 
+// under the terms of the GNU GPL3 or (at your option) any later version.
+
+// This program is distributed in hope that it will be useful, but 
+// WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+// or FITNESS FOR A PARTICULAR PURPOSE. See at LICENSE file for more details.
+
 #include "kernel.h"
 
 void kmain(void){
@@ -6,10 +16,5 @@ void kmain(void){
     idt_init();         // Initialize the IDT
     kb_init();          // Initialize the keyboard
     kshell_init();      // Initialize the kernel shell
-
-    kshell(NULL);       // Start the kernel shell
-    show_info();        // Show the heap size and system information
-
-    while (1);
+    while (1);          // Loop forever
 }
-

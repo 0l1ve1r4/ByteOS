@@ -1,3 +1,13 @@
+// This file is part of basicOS.
+// Copyright (C) 2024 Guilherme Oliveira Santos
+
+// This is free software: you can redistribute it and/or modify it 
+// under the terms of the GNU GPL3 or (at your option) any later version.
+
+// This program is distributed in hope that it will be useful, but 
+// WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+// or FITNESS FOR A PARTICULAR PURPOSE. See at LICENSE file for more details.
+
 #include "kstdlib.h"
 
 static uint32_t heap_used = 0;
@@ -72,7 +82,6 @@ void free(void* ptr) {
     if (ptr == NULL) {
         return;
     }
-
     block_header_t* block = (block_header_t*)((uint8_t*)ptr - sizeof(block_header_t));
     block->free = 1;
     merge_blocks();
@@ -89,15 +98,14 @@ uint32_t get_heap_size(void) {
 
 }
 
+// Power off the system
+void power_off(void) {
+    outw(ACPI_PM1A_CNT, SLP_TYPa | SLP_EN);                 // Send the shutdown command to the ACPI 
+    outw(ACPI_PM1B_CNT, SLP_TYPb | SLP_EN);                 // Power Management Control Registers
+    while (1) __asm__ __volatile__("hlt");                  // If ACPI shutdown does not work, halt the CPU
+}
+
 // Exit the kernel
 void outw(uint16_t port, uint16_t value) {
     __asm__ __volatile__("outw %1, %0" : : "dN" (port), "a" (value));
-}
-
-// Power off the system
-void power_off() {
-    outw(ACPI_PM1A_CNT, SLP_TYPa | SLP_EN);                 // Send the shutdown command to the ACPI Power Management Control Registers
-    outw(ACPI_PM1B_CNT, SLP_TYPb | SLP_EN);
-
-    while (1) __asm__ __volatile__("hlt");                  // If ACPI shutdown does not work, halt the CPU
 }
