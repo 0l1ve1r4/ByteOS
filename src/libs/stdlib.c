@@ -14,6 +14,10 @@ static uint32_t heap_used = 0;
 static uint32_t heap[HEAP_SIZE];
 static block_header_t* free_list = (block_header_t*)heap;
 
+#define BLOCK_SIZE sizeof(block_header_t)
+
+#include "stdio.h"
+
 // Initialize the heap
 void heap_init(void) {
     free_list->size = HEAP_SIZE - sizeof(block_header_t);
@@ -73,7 +77,7 @@ void* malloc(size_t size) {
     } else {
         block->free = 0;
     }
-    heap_used += block->size + sizeof(block_header_t);
+    heap_used += block->size;
     return (void*)((uint8_t*)block + sizeof(block_header_t));
 }
 
@@ -83,6 +87,7 @@ void free(void* ptr) {
         return;
     }
     block_header_t* block = (block_header_t*)((uint8_t*)ptr - sizeof(block_header_t));
+    heap_used -= block->size;
     block->free = 1;
     merge_blocks();
 }
@@ -96,16 +101,4 @@ uint32_t get_heap_used(void) {
 uint32_t get_heap_size(void) {
     return (uint32_t) HEAP_SIZE;
 
-}
-
-// Power off the system
-void power_off(void) {
-    outw(ACPI_PM1A_CNT, SLP_TYPa | SLP_EN);                 // Send the shutdown command to the ACPI 
-    outw(ACPI_PM1B_CNT, SLP_TYPb | SLP_EN);                 // Power Management Control Registers
-    while (1) __asm__ __volatile__("hlt");                  // If ACPI shutdown does not work, halt the CPU
-}
-
-// Exit the kernel
-void outw(uint16_t port, uint16_t value) {
-    __asm__ __volatile__("outw %1, %0" : : "dN" (port), "a" (value));
 }

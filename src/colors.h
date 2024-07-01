@@ -11,21 +11,24 @@
 #ifndef COLORS_H
 #define COLORS_H
 
-#define BLACK            0x00
-#define BLUE             0x01
-#define GREEN            0x02
-#define CYAN             0x03
-#define RED              0x04
-#define MAGENTA          0x05
-#define BROWN            0x06
-#define LIGHT_GREY       0x07
-#define DARK_GREY        0x08
-#define LIGHT_BLUE       0x09
-#define LIGHT_GREEN      0x0A
-#define LIGHT_CYAN       0x0B
-#define LIGHT_RED        0x0C
-#define LIGHT_MAGENTA    0x0D
-#define LIGHT_BROWN      0x0E
-#define WHITE            0x0F
+/* Hardware text mode color constants. */
+enum vga_color {
+    VGA_COLOR_BLACK = 0x0,
+    VGA_COLOR_BLUE = 0x1,
+    VGA_COLOR_GREEN = 0x2,
+    VGA_COLOR_CYAN = 0x3,
+    VGA_COLOR_RED = 0x4,
+    VGA_COLOR_MAGENTA = 0x5,
+    VGA_COLOR_BROWN = 0x6,
+    VGA_COLOR_LIGHT_GREY = 0x7,
+    VGA_COLOR_DARK_GREY = 0x8,
+    VGA_COLOR_LIGHT_BLUE = 0x9,
+    VGA_COLOR_LIGHT_GREEN = 0xA,
+    VGA_COLOR_LIGHT_CYAN = 0xB,
+    VGA_COLOR_LIGHT_RED = 0xC,
+    VGA_COLOR_LIGHT_MAGENTA = 0xD,
+    VGA_COLOR_LIGHT_BROWN = 0xE,
+    VGA_COLOR_WHITE = 0xF,
+};
 
 #endif // COLORS_H

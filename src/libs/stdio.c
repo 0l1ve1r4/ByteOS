@@ -10,62 +10,96 @@
 
 #include "stdio.h"
 
-int8_t *vidptr;                             // pointer to video memory
-uint32_t current_loc;                       // current location on the screen
-uint32_t buffer_index;                      // index for the input buffer
-char input_buffer[BUFFER_SIZE];             // buffer to store input characters
-
+static int8_t *vidptr;                             // pointer to video memory
 static uint8_t current_color; 
+
+static uint32_t current_loc;                       // current location on the screen
+static uint32_t buffer_index;                      // index for the input buffer
+
+static char input_buffer[BUFFER_SIZE];             // buffer to store input characters
+static bool is_caps_lock;                          // is the caps lock key pressed?
+
+const char* ANSI_COLORS[] = {
+    ANSI_BLACK,
+    ANSI_BLUE,
+    ANSI_GREEN,
+    ANSI_CYAN,
+    ANSI_RED,
+    ANSI_MAGENTA,
+    ANSI_BROWN,
+    ANSI_LIGHT_GREY,
+    ANSI_DARK_GREY,
+    ANSI_LIGHT_BLUE,
+    ANSI_LIGHT_GREEN,
+    ANSI_LIGHT_CYAN,
+    ANSI_LIGHT_RED,
+    ANSI_LIGHT_MAGENTA,
+    ANSI_LIGHT_BROWN,
+    ANSI_WHITE
+};
 
 // Initialize the VGA text mode
 void stdio_init(void){
     vidptr = (int8_t*) VIDEO_ADDRESS;
+    current_color = VGA_COLOR_LIGHT_GREY;
     current_loc = 0;
     buffer_index = 0;
-    current_color = LIGHT_GREY;
+    is_caps_lock = FALSE;
 }
 
-bool verify_ansi_codes(const char* format, uint8_t *color){
-    if (*format == '\033') {
-        char ansi_code[MAX_UINT32_STR_SIZE];
-        uint8_t ansi_index = 0;
+char to_uppercase(char c) {
+    if (c >= 'a' && c <= 'z') {
+        return c - 32;
+    }
+    return c;
+}
 
-        // Copy the ANSI code into ansi_code array
-        while (*format != 'm' && ansi_index < MAX_UINT32_STR_SIZE - 1) {
-            ansi_code[ansi_index] = *format;
-            format++;
-            ansi_index++;
+void verify_ansi_colors(const char* format, uint8_t *color) {
+    char ansi_code[MAX_UINT32_STR_SIZE];
+    uint8_t ansi_index = 0;
+
+    // Copy the ANSI code into ansi_code array
+    while (*format != 'm' && ansi_index < MAX_UINT32_STR_SIZE - 1) {
+        ansi_code[ansi_index] = *format;
+        format++;
+        ansi_index++;
+    }
+
+    ansi_code[ansi_index] = 'm';
+    ansi_code[ansi_index + 1] = '\0';
+
+    for (uint8_t i = 0; i <= VGA_COLOR_WHITE; i++) {
+        if (strcmp(ansi_code, ANSI_COLORS[i]) == 0) {
+            *color = i;
+            return;
         }
-
-        // Ensure the ansi_code string is null-terminated
-        ansi_code[ansi_index] = 'm';
-        ansi_code[ansi_index + 1] = '\0';
-
-        // Check the ANSI code against known codes
-        if (strcmp(ansi_code, RED_ANSI) == 0) {
-            *color = RED;
-        } else if (strcmp(ansi_code, GREEN_ANSI) == 0) {
-            *color = GREEN;
-        } else if (strcmp(ansi_code, BLUE_ANSI) == 0) {
-            *color = BLUE;
-        } else if (strcmp(ansi_code, LIGHTGREY_ANSI) == 0) {
-            *color = LIGHT_GREY;
-        }   return TRUE;
-    }   return FALSE;
+    }
 }
 
 void printf(const char* format, ...) {
-    if (*format == '\0') { return; }
+    if (*format == '\0') { 
+        return; 
+    }
 
     va_list args;
     va_start(args, format);
 
     while (*format != '\0') {
-        if (verify_ansi_codes(format, &current_color)) {
+        if (*format == '\033'){
+            verify_ansi_colors(format, &current_color);
             format += ANSI_ESCAPE_CODES_SIZE; // Skip past the ANSI code
-        } else if (*format == '%') {
+        }
+
+        else if (*format == '%') {
             format++;
             switch (*format) {
+                case 'c': {
+                    char c = va_arg(args, char);
+                    vidptr[current_loc++] = c;
+                    vidptr[current_loc++] = current_color;
+                    break;
+                }
+
                 case 'd': {
                     uint32_t num = va_arg(args, uint32_t);
                     char* num_str = uint_to_str(num);
@@ -115,21 +149,12 @@ void printf(const char* format, ...) {
         format++;
     }
 
-    // If reached the end of the screen, scroll the screen
+    // If reached the end scroll the screen
     if (current_loc >= SCREENSIZE) {
-        uint32_t j = 0;
-        while (j < SCREENSIZE - LINE_SIZE) {
-            vidptr[j] = vidptr[j + LINE_SIZE];
-            j++;
-        }
-
-        while (j < SCREENSIZE) {
-            vidptr[j] = ' ';
-            vidptr[j + 1] = LIGHT_GREY;
-            j += 2;
-        }
-        current_loc = SCREENSIZE - LINE_SIZE;
+        clear_inline();
     }
+    
+    move_cursor(current_loc / 2);
     va_end(args);
 }
 
@@ -191,18 +216,33 @@ void sprintf(char* buffer, const char* format, ...) {
 }
 
 // Clear the screen
-void kclear(void) {
+void clear(void) {
     uint32_t j = 0;
     current_loc = 0;
     while (j < COLUMNS_IN_LINE * LINES * BYTES_EACH_ELEMENT){
         vidptr[j] = ' '; 
-        vidptr[j+1] = LIGHT_GREY;
+        vidptr[j+1] = VGA_COLOR_LIGHT_GREY;
         j = j + 2;
     }
     return;
 }
 
-// this functions needs to be here because uses vidptr
+// Clear input line (the last one)
+void clear_inline(void) {
+    for (uint32_t j = 0; j < SCREENSIZE - LINE_SIZE; ++j) {         // Shift lines up by one
+        vidptr[j] = vidptr[j + LINE_SIZE];
+    }
+
+    uint32_t start = SCREENSIZE - LINE_SIZE;
+    for (uint32_t j = start; j < SCREENSIZE; j += 2) {              // Clear the last line
+        vidptr[j] = ' ';
+        vidptr[j + 1] = VGA_COLOR_LIGHT_GREY;
+    }
+
+    current_loc = SCREENSIZE - LINE_SIZE;                           // Update the cursor location
+    move_cursor(current_loc / 2);
+}
+
 void keyboard_handler_main(void) {
     uint8_t status;
     char keycode;
@@ -212,41 +252,69 @@ void keyboard_handler_main(void) {
     status = read_port(KEYBOARD_STATUS_PORT);
     if (status & 0x01) {
         keycode = read_port(KEYBOARD_DATA_PORT);
-        if (keycode < 0)
+        if (keycode < 0) {
             return;
-
-        switch (keycode) {
-            case ENTER_KEY_CODE:
-                input_buffer[buffer_index] = '\0';            
-                shell(input_buffer); 
-
-                // Clear the input buffer
-                buffer_index = 0;
-                input_buffer[0] = '\0';
-                break;
-
-            case BACKSPACE_KEY_CODE:
-                if (buffer_index > 0) {
-                    buffer_index--;
-                    input_buffer[buffer_index] = '\0';
-
-                    if (current_loc > 0) {
-                        current_loc -= BYTES_EACH_ELEMENT;
-                        vidptr[current_loc] = ' ';
-                        vidptr[current_loc + 1] = LIGHT_GREEN;
-                    }
-                }
-                break;
-
-            default:
-                if (buffer_index < BUFFER_SIZE - 1) {
-                    uint8_t character = keyboard_map[(uint8_t)keycode];
-                    input_buffer[buffer_index++] = character;
-
-                    vidptr[current_loc++] = character;
-                    vidptr[current_loc++] = 0x07;
-                }
-                break;
         }
     }
+
+    switch (keycode) {
+        case ENTER_KEY_CODE:
+            input_buffer[buffer_index] = '\0';            
+            shell(input_buffer); 
+            buffer_index = 0;
+            input_buffer[0] = '\0';
+            
+            break;
+
+        case BACKSPACE_KEY_CODE:
+            if (buffer_index > 0) {
+                buffer_index--;
+                input_buffer[buffer_index] = '\0';
+
+                if (current_loc > 0) {
+                    current_loc -= BYTES_EACH_ELEMENT;
+                    vidptr[current_loc] = ' ';
+                    vidptr[current_loc + 1] = VGA_COLOR_LIGHT_GREY;
+                    move_cursor(current_loc / 2);
+                }
+            }
+            
+            break;
+
+        case CAPSLOCK_KEY_CODE:
+            is_caps_lock = !is_caps_lock;
+            
+            break;
+
+        default:
+            if (buffer_index < BUFFER_SIZE - 1) {
+                uint8_t character = keyboard_map[(uint8_t)keycode];
+                if (is_caps_lock) {
+                    character = to_uppercase(character);
+                }
+
+                input_buffer[buffer_index++] = character;
+
+                vidptr[current_loc++] = character;
+                vidptr[current_loc++] = 0x07; // Assuming 0x07 is the attribute for the character
+                move_cursor(current_loc / 2);
+            }
+            
+            break;
+        }
+}
+
+// Send bytes to the cursor position register
+void move_cursor(uint16_t pos) {
+    outb (FB_COMMAND_PORT, FB_HIGH_BYTE_COMMAND);
+    outb (FB_DATA_PORT, ((pos >> 8) & 0x00FF));
+    outb (FB_COMMAND_PORT, FB_LOW_BYTE_COMMAND);
+    outb (FB_DATA_PORT, pos & 0x00FF);
+}
+
+// Power off the system
+void power_off(void) {
+    outw(ACPI_PM1A_CNT, SLP_TYPa | SLP_EN);
+    outw(ACPI_PM1B_CNT, SLP_TYPb | SLP_EN);
+    while (1) __asm__ __volatile__("hlt");
 }

@@ -23,6 +23,7 @@ _PROTOTYPE( char* strcat, (char* dest, const char* src)             ); // Concat
 _PROTOTYPE( uint32_t strcmp, (const char* str1, const char* str2)   ); // Compare two strings
 _PROTOTYPE( uint32_t num_length, (uint32_t n)                       ); // Get the length of a number
 _PROTOTYPE( void* memcpy, (void* dest, const void* src, size_t n)   ); // Copy memory area
+_PROTOTYPE( void* memset, (void* dest, int c, size_t n)             ); // Fill memory with a constant byte
 _PROTOTYPE( size_t count_tokens, (const char* str, char delim)      ); // Count the number of tokens in a string
 _PROTOTYPE( char** split, (const char* str, char delim)             ); // Split a string into tokens
 

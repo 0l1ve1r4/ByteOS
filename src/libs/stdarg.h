@@ -1,5 +1,5 @@
-#ifndef KSTDARG_H
-#define KSTDARG_H
+#ifndef STDARG_H
+#define STDARG_H
 
 #pragma GCC diagnostic ignored "-Wbuiltin-declaration-mismatch"
 
@@ -20,4 +20,4 @@ typedef char* va_list;
 // Macro to end the use of the `va_list`
 #define va_end(ap) (ap = (va_list)0)
 
-#endif // KSTDARG_H
+#endif // STDARG_H

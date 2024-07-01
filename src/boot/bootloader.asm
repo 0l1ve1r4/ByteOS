@@ -8,7 +8,7 @@
 ; WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
 ; or FITNESS FOR A PARTICULAR PURPOSE. See at LICENSE file for more details.
 
-bits 32                         ; NASM directive to set 32-bit mode
+bits 32                        ; NASM directive to set 32-bit mode
 
 section .text 
     align 4

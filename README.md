@@ -10,7 +10,7 @@
 
 - **Bootloader**: Includes a 32KB stack.
 - **Heap managment**: Malloc and free features.
-- **Input**: Basic keyboard input functionality.
+- **Input**: Basic keyboard input with caps or no-capslock functionality.
 - **Output**: Simple screen output functionality.
 
 ## Built-in Libraries
@@ -20,6 +20,15 @@
 - **stdlib.h**: Memory and heap management functions, including shutdown (exit).
 - **shell.h**: Basic shell with built-in commands.
 - **stdarg.h**: Standard Arguments
+
+## TODO [Wiki OSdev](https://wiki.osdev.org/Bare_Bones)
+
+- **[x]** Support for formated input to Terminal Driver
+- **[x]** Implementing Terminal Scrolling
+- **[x]** Rendering Colorful ASCII Art
+- **[ ]** Calling Global Constructors
+- **[ ]** Implementing Meaty Skeleton
+- **[ ]** Going Further
 
 ## Building and Running
 

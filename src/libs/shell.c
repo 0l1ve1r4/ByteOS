@@ -18,7 +18,7 @@
 
 char* builtin_str[] = {
     "init",
-    "exit",
+    "poweroff",
     "echo",
     "clear",
     "help",
@@ -32,7 +32,7 @@ char* builtin_desc[] = {
     "Echo the input",
     "Clear the screen",
     "Show this help message",
-    "Show the status of the system"
+    "Show the status of the system",
     "Change the color of the shell"
 };
 
@@ -70,7 +70,7 @@ void shell(char* command) {
     }
 
     printf("\n");
-    printf("root@%skernel%s:$/ ", GREEN_ANSI, LIGHTGREY_ANSI);
+    printf("root@%skernel%s:$/ ", ANSI_LIGHT_GREEN, ANSI_LIGHT_GREY);
 
 }
 
@@ -82,8 +82,24 @@ void shell(char* command) {
 
 // Clear the screen and show the OS prompt
 void shell_init(char** args) {
-    kclear();
-    printf(OS_PROMPT);
+    clear();
+    char** os_prompt = split(OS_PROMPT, '\n');
+    uint8_t i = 3;
+    while (*os_prompt) {
+        
+        printf("%s%s\n", ANSI_COLORS[i], *os_prompt);
+        os_prompt++;
+
+        if (i >= 7) {
+            i = 3;
+        } else {
+            i += 4;
+        }
+
+    }
+
+    printf("%s", ANSI_LIGHT_GREY);
+
 } 
 
 void shell_exit(char** args) {
@@ -98,7 +114,7 @@ void shell_echo(char** args) {
 }
 
 void shell_clear(char** args) {
-    kclear();
+    clear();
 }
 
 void shell_help(char** args){
@@ -117,27 +133,14 @@ void shell_help(char** args){
 }
 
 void shell_status(char** args){
-    char* str = (char*)malloc(sizeof(char));
+    char* str = (char*)malloc(sizeof(char) * 20);
     sprintf(str, "Heap: %d/%d", get_heap_used(), get_heap_size());
     printf("%s\n", str);
-    free(str);
 }
 
 void shell_color(char** args){
-    if (strcmp(args[0], "red") == 0) {
-        printf(RED_ANSI);
-    } else if (strcmp(args[0], "green") == 0) {
-        printf(GREEN_ANSI);
-    } else if (strcmp(args[0], "blue") == 0) {
-        printf(BLUE_ANSI);
-    } else if (strcmp(args[0], "yellow") == 0) {
-    } else {
-        printf("Invalid color: ");
-        printf(args[0]);
-    }
-
-
-
+    printf("Color command\n");
+    return;
 }
 
 #pragma GCC diagnostic pop

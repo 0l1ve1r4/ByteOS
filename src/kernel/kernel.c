@@ -11,10 +11,21 @@
 #include "kernel.h"
 
 void kmain(void){
-    stdio_init();       // Initialize the VGA text mode
-    heap_init();        // Initialize the heap
-    idt_init();         // Initialize the IDT
-    kb_init();          // Initialize the keyboard
-    shell("init");     // Initialize the shell
-    while (1);          // Loop forever
+
+    // Initialize the VGA text mode
+    stdio_init();
+
+    // Initialize the heap
+    heap_init();
+
+    // Initialize the IDT        
+    idt_init();
+
+    // Initialize the keyboard         
+    kb_init();
+
+    // Initialize the shell
+    shell("init");     
+    
+    while (1);          
 }

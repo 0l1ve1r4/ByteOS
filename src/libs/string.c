@@ -106,6 +106,15 @@ void* memcpy(void* dest, const void* src, size_t n) {
     return dest;
 }
 
+// Fill n bytes of memory with the constant byte c
+void *memset(void *dest, int c, size_t n) {
+    unsigned char* d = (unsigned char*)dest;
+    while (n--) {
+        *d++ = (unsigned char)c;
+    }
+    return dest;
+}
+
 // Concatenate the source string to the destination string
 char* strcat(char* dest, const char* src) {
     char* original_dest = dest;
@@ -176,5 +185,6 @@ char** split(const char* str, char delim) {
     // Null-terminate the array
     result[token_index] = NULL;
 
+    // needed to free the malloc
     return result;
 }
