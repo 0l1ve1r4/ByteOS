@@ -15,6 +15,6 @@ void kmain(void){
     heap_init();        // Initialize the heap
     idt_init();         // Initialize the IDT
     kb_init();          // Initialize the keyboard
-    kshell_init();      // Initialize the kernel shell
+    shell("init");     // Initialize the shell
     while (1);          // Loop forever
 }

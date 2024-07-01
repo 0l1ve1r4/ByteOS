@@ -15,10 +15,11 @@
 
 ## Built-in Libraries
 
-- **kstdio.h**: Input/output operations.
-- **kstring.h**: String manipulation utilities.
-- **kstdlib.h**: Memory and heap management functions, including shutdown (exit).
-- **kshell.h**: Basic shell with built-in commands.
+- **stdio.h**: Input/output operations.
+- **string.h**: String manipulation utilities.
+- **stdlib.h**: Memory and heap management functions, including shutdown (exit).
+- **shell.h**: Basic shell with built-in commands.
+- **stdarg.h**: Standard Arguments
 
 ## Building and Running
 

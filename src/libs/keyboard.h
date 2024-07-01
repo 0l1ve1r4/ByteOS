@@ -11,32 +11,31 @@
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
 
+#pragma GCC diagnostic ignored "-Wbuiltin-declaration-mismatch"
 #include "../types.h"
 
-#define IDT_SIZE 256
-
-#define INTERRUPT_GATE 0x8e
-#define KERNEL_CODE_SEGMENT_OFFSET 0x08
+#define IDT_SIZE 256                                    // IDT size
+#define INTERRUPT_GATE 0x8e                             // Interrupt gate flag
+#define KERNEL_CODE_SEGMENT_OFFSET 0x08                 // Kernel code segment offset
 
 struct IDT_entry {
     uint16_t offset_lowerbits;
-    uint16_t selector;
+    uint16_t selector;                                  // Kernel segment selector (0x08)
     uint8_t zero;
     uint8_t type_attr;
     uint16_t offset_higherbits;
 };
 
-void kb_init(void);
-void idt_init(void);
-void keyboard_handler_main(void);
+// Function prototypes
+_PROTOTYPE( void kb_init, (void) );                     // Initialize the keyboard
+_PROTOTYPE( void idt_init, (void) );                    // Initialize the IDT
+_PROTOTYPE( void keyboard_handler_main, (void) );       // Main keyboard handler
 
 // Function declared in boot/bootloader.asm
-extern void keyboard_handler(void);
-extern char read_port(uint16_t port);
-extern void write_port(uint16_t port, uint8_t data);
-extern void load_idt(uint32_t *idt_ptr);
-
-// Keyboard map for US layout
-extern uint8_t keyboard_map[128];
+extern void keyboard_handler(void);                     // Keyboard handler
+extern char read_port(uint16_t port);                   // Read data from a port
+extern void write_port(uint16_t port, uint8_t data);    // Write data to a port
+extern void load_idt(uint32_t *idt_ptr);                // Load the IDT
+extern uint8_t keyboard_map[128];                       // Keyboard map for US layout
 
 #endif

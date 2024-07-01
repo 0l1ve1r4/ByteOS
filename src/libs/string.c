@@ -8,8 +8,8 @@
 // WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
 // or FITNESS FOR A PARTICULAR PURPOSE. See at LICENSE file for more details.
 
-#include "kstring.h"
-#include "kstdlib.h"
+#include "string.h"
+#include "stdlib.h"
 
 // Copy the source string to the destination string
 char* strcpy(char* dest, const char* src) {

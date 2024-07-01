@@ -1,7 +1,7 @@
 # Variables
 NASM = nasm
 GCC = gcc -fno-stack-protector -std=c99
-GCC_FLAGS = -Wall -Wextra -m32
+GCC_FLAGS = -Wall -Wextra -Werror -m32
 LD = ld
 QEMU = qemu-system-i386
 

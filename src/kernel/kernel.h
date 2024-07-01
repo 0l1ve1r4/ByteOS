@@ -13,8 +13,9 @@
 
 #include "../colors.h"
 #include "../types.h"
-#include "../libs/kstdio.h"
+#include "../libs/stdio.h"
+#include "../libs/stdlib.h"
 
-void kmain(void);
+_PROTOTYPE( void kmain, (void) );
 
 #endif

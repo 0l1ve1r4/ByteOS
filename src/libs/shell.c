@@ -11,48 +11,46 @@
 // Kernel shell implementation, based on this tutorial:
 // https://brennan.io/2015/01/16/write-a-shell-in-c/
 
-#include "kshell.h"
-#include "kstdlib.h"
-#include "kstring.h"
-#include "kstdio.h"
-
-// Clear the screen and show the OS prompt
-void kshell_init(void) {
-    kclear();
-    printf(OS_PROMPT);
-    printf(SHELL_PROMPT);
-} 
+#include "shell.h"
+#include "stdlib.h"
+#include "string.h"
+#include "stdio.h"
 
 char* builtin_str[] = {
+    "init",
     "exit",
     "echo",
     "clear",
     "help",
-    "status"
+    "status",
+    "color"
 };
 
 char* builtin_desc[] = {
+    "Initialize the shell",
     "Shutdown the kernel",
     "Echo the input",
     "Clear the screen",
     "Show this help message",
     "Show the status of the system"
+    "Change the color of the shell"
 };
 
 void (*builtin_func[]) (char**) = {
+    &shell_init,
     &shell_exit,
     &shell_echo,
     &shell_clear,
     &shell_help,
-    &shell_status
-
+    &shell_status,
+    &shell_color
 };
 
 size_t num_builtins() {
     return sizeof(builtin_str) / sizeof(char *);
 }
 
-void kshell(char* command) {
+void shell(char* command) {
     printf("\n");
     char** args = split(command, ' ');
     command = args[0];
@@ -72,7 +70,7 @@ void kshell(char* command) {
     }
 
     printf("\n");
-    printf(SHELL_PROMPT);
+    printf("root@%skernel%s:$/ ", GREEN_ANSI, LIGHTGREY_ANSI);
 
 }
 
@@ -81,6 +79,12 @@ void kshell(char* command) {
 // and they need to have the same signature
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+
+// Clear the screen and show the OS prompt
+void shell_init(char** args) {
+    kclear();
+    printf(OS_PROMPT);
+} 
 
 void shell_exit(char** args) {
     power_off();
@@ -116,6 +120,24 @@ void shell_status(char** args){
     char* str = (char*)malloc(sizeof(char));
     sprintf(str, "Heap: %d/%d", get_heap_used(), get_heap_size());
     printf("%s\n", str);
+    free(str);
+}
+
+void shell_color(char** args){
+    if (strcmp(args[0], "red") == 0) {
+        printf(RED_ANSI);
+    } else if (strcmp(args[0], "green") == 0) {
+        printf(GREEN_ANSI);
+    } else if (strcmp(args[0], "blue") == 0) {
+        printf(BLUE_ANSI);
+    } else if (strcmp(args[0], "yellow") == 0) {
+    } else {
+        printf("Invalid color: ");
+        printf(args[0]);
+    }
+
+
+
 }
 
 #pragma GCC diagnostic pop

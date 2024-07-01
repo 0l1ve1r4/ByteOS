@@ -8,8 +8,11 @@
 // WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
 // or FITNESS FOR A PARTICULAR PURPOSE. See at LICENSE file for more details.
 
-#ifndef _TYPES_H
-#define _TYPES_H
+#ifndef TYPES_H
+#define TYPES_H
+
+// FUNCTIONS PROTOTYPE
+#define _PROTOTYPE(function, params) function params
 
 typedef unsigned char           uint8_t;
 typedef unsigned short int      uint16_t;
@@ -51,11 +54,4 @@ typedef uint8_t                 bool;
 #define GB                      (uint32_t)  1024 * 1024 * 1024
 #define BUFFER_SIZE             (uint8_t)   255 
 
-// Screen constants
-#define LINES                   (uint8_t) 25
-#define COLUMNS_IN_LINE         (uint8_t) 80
-#define BYTES_EACH_ELEMENT      (uint8_t) 2
-#define LINE_SIZE               (uint16_t) (BYTES_EACH_ELEMENT * COLUMNS_IN_LINE)
-#define SCREENSIZE              (uint16_t) (BYTES_EACH_ELEMENT * COLUMNS_IN_LINE * LINES)
-
-#endif
+#endif // TYPES_H

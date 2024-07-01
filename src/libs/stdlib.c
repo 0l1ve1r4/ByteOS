@@ -8,7 +8,7 @@
 // WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
 // or FITNESS FOR A PARTICULAR PURPOSE. See at LICENSE file for more details.
 
-#include "kstdlib.h"
+#include "stdlib.h"
 
 static uint32_t heap_used = 0;
 static uint32_t heap[HEAP_SIZE];
