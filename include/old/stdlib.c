@@ -1,13 +1,3 @@
-// This file is part of basicOS.
-// Copyright (C) 2024 Guilherme Oliveira Santos
-
-// This is free software: you can redistribute it and/or modify it 
-// under the terms of the GNU GPL3 or (at your option) any later version.
-
-// This program is distributed in hope that it will be useful, but 
-// WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
-// or FITNESS FOR A PARTICULAR PURPOSE. See at LICENSE file for more details.
-
 #include "stdlib.h"
 
 static uint32_t heap_used = 0;
@@ -19,7 +9,7 @@ static block_header_t* free_list = (block_header_t*)heap;
 #include "stdio.h"
 
 // Initialize the heap
-void heap_init(void) {
+void heap_initialize(void) {
     free_list->size = HEAP_SIZE - sizeof(block_header_t);
     free_list->free = 1;
     free_list->next = NULL;

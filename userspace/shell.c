@@ -12,12 +12,12 @@
 // https://brennan.io/2015/01/16/write-a-shell-in-c/
 
 #include "shell.h"
-#include "stdlib.h"
-#include "string.h"
-#include "stdio.h"
+
+#include "../drivers/keyboard.h"
+#include "../drivers/terminal.h"
+#include "../include/string.h"
 
 char* builtin_str[] = {
-    "init",
     "poweroff",
     "echo",
     "clear",
@@ -27,7 +27,6 @@ char* builtin_str[] = {
 };
 
 char* builtin_desc[] = {
-    "Initialize the shell",
     "Shutdown the kernel",
     "Echo the input",
     "Clear the screen",
@@ -36,8 +35,39 @@ char* builtin_desc[] = {
     "Change the color of the shell"
 };
 
+// Clear the screen and show the OS prompt
+void shell_initialize(void) {
+    char* ascii_colors[] = {"\033[94m", "\033[37m"};
+    char** os_prompt = split(OS_PROMPT, '\n');
+    uint8_t i = 0;
+    while (*os_prompt) {
+        terminal_printf("%s%s\n", ascii_colors[i], *os_prompt);
+        os_prompt++;
+
+        if (i == 2) {
+            i = 0;
+        }
+        else {
+            i++;
+        } 
+    }
+    terminal_printf("%s", ascii_colors[1]);
+    while (1) {
+        terminal_printf("\n");
+        terminal_printf("root@%skernel%s:$/ ", "\033[92m", "\033[37m");
+
+        char buffer[256];
+        buffer[0] = '\0';
+
+        // Wait for input and store it in buffer
+        keyboard_scanf(buffer);
+
+        // Process the input with the shell
+        shell(buffer);
+    }
+} 
+
 void (*builtin_func[]) (char**) = {
-    &shell_init,
     &shell_exit,
     &shell_echo,
     &shell_clear,
@@ -51,26 +81,23 @@ size_t num_builtins() {
 }
 
 void shell(char* command) {
-    printf("\n");
+    terminal_printf("\n");
     char** args = split(command, ' ');
     command = args[0];
     char** arguments = args + 1;    
 
-    uint8_t i = 0, status = EXIT_FAILURE;
+    uint8_t i = 0, status = DEBUG_ERROR;
     for (i = 0; i < num_builtins(); i++) {
         if (strcmp(command, builtin_str[i]) == 0) {
             (*builtin_func[i])(arguments);
-            status = EXIT_SUCCESS;
+            status = DEBUG_SUCCESS;
         }
     }
 
-    if (status == EXIT_FAILURE && strcmp(command, "") != 0){
-        printf("Command not found: ");
-        printf(command);
+    if (status == DEBUG_ERROR && strcmp(command, "") != 0){
+        terminal_printf("Command not found: ");
+        terminal_printf(command);
     }
-
-    printf("\n");
-    printf("root@%skernel%s:$/ ", ANSI_LIGHT_GREEN, ANSI_LIGHT_GREY);
 
 }
 
@@ -80,66 +107,42 @@ void shell(char* command) {
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
-// Clear the screen and show the OS prompt
-void shell_init(char** args) {
-    clear();
-    char** os_prompt = split(OS_PROMPT, '\n');
-    uint8_t i = 3;
-    while (*os_prompt) {
-        
-        printf("%s%s\n", ANSI_COLORS[i], *os_prompt);
-        os_prompt++;
-
-        if (i >= 7) {
-            i = 3;
-        } else {
-            i += 4;
-        }
-
-    }
-
-    printf("%s", ANSI_LIGHT_GREY);
-
-} 
-
 void shell_exit(char** args) {
-    power_off();
+    terminal_printf("Shutting down the kernel...\n");
 }
 
 void shell_echo(char** args) {
     while (*args) {
-        printf("%s ", *args);
+        terminal_printf("%s ", *args);
         args++;
     }
 }
 
 void shell_clear(char** args) {
-    clear();
+    terminal_clear();
 }
 
 void shell_help(char** args){
     uint8_t description = strcmp(args[0], "-d");
-    description == 0 ? printf("Available commands:\n") : printf("Available commands (use -d to show more):\n");    
-    printf("\n");
+    description == 0 ? terminal_printf("Available commands:\n") : terminal_printf("Available commands (use -d to show more):\n");    
+    terminal_printf("\n");
     
     for (uint8_t i = 0; i < num_builtins(); i++) {
-        printf("| %s", builtin_str[i]);
+        terminal_printf("| %s", builtin_str[i]);
         
         if (!description) {
-            printf(" | %s", builtin_desc[i]);
+            terminal_printf(" | %s", builtin_desc[i]);
         }
-        printf("\n");
+        terminal_printf("\n");
     }
 }
 
 void shell_status(char** args){
-    char* str = (char*)malloc(sizeof(char) * 20);
-    sprintf(str, "Heap: %d/%d", get_heap_used(), get_heap_size());
-    printf("%s\n", str);
+    terminal_printf("%s\n", "Not implemented");
 }
 
 void shell_color(char** args){
-    printf("Color command\n");
+    terminal_printf("Color command\n");
     return;
 }
 

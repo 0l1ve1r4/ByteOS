@@ -15,11 +15,8 @@
 
 ## Built-in Libraries
 
-- **stdio.h**: Input/output operations.
 - **string.h**: String manipulation utilities.
-- **stdlib.h**: Memory and heap management functions, including shutdown (exit).
 - **shell.h**: Basic shell with built-in commands.
-- **stdarg.h**: Standard Arguments
 
 ## TODO [Wiki OSdev](https://wiki.osdev.org/Bare_Bones)
 

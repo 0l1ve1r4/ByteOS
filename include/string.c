@@ -1,15 +1,5 @@
-// This file is part of basicOS.
-// Copyright (C) 2024 Guilherme Oliveira Santos
-
-// This is free software: you can redistribute it and/or modify it 
-// under the terms of the GNU GPL3 or (at your option) any later version.
-
-// This program is distributed in hope that it will be useful, but 
-// WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
-// or FITNESS FOR A PARTICULAR PURPOSE. See at LICENSE file for more details.
-
 #include "string.h"
-#include "stdlib.h"
+
 
 // Copy the source string to the destination string
 char* strcpy(char* dest, const char* src) {
@@ -39,7 +29,7 @@ char* uint_to_str(uint32_t n) {
 
 // Convert a float to a string
 char* float_to_str(float n) {               
-    static char str[MAX_FLOAT_STR_SIZE]; 
+    static char str[20]; 
     char* p = str;                                      // Pointer to the string
     if (n < 0) {                                        // Handle negative numbers
         *p++ = '-';
@@ -148,43 +138,34 @@ size_t count_tokens(const char* str, char delim) {
 }
 
 char** split(const char* str, char delim) {
-    size_t num_tokens = count_tokens(str, delim);
-    
-    // Allocate memory for the array of pointers
-    char** result = (char**)malloc((num_tokens + 1) * sizeof(char*));
-    if (!result) {
-        return NULL;
-    }
-    size_t token_index = 0;                             // Tokenize the string
-    while (*str) {
-        while (*str == delim) {                         // Skip delimiters
+    static char tokens[MAX_TOKENS][MAX_TOKEN_LENGTH]; // Static array for tokens
+    static char* result[MAX_TOKENS + 1];              // Static array for pointers to tokens
+    size_t token_index = 0;
+
+    while (*str && token_index < MAX_TOKENS) {
+        while (*str == delim) { // Skip delimiters
             str++;
         }
 
-        const char* token_start = str;                  // Find the end of the token
-        while (*str && *str != delim) {
+        const char* token_start = str; // Find the end of the token
+        size_t token_length = 0;
+
+        while (*str && *str != delim && token_length < MAX_TOKEN_LENGTH - 1) {
             str++;
+            token_length++;
         }
 
-        size_t token_length = str - token_start;        // Allocate memory for the token and copy it
-        char* token = (char*)malloc((token_length + 1) * sizeof(char));
-        if (!token) {
-            for (size_t i = 0; i < token_index; i++) {  // Free previously allocated memory in case of failure
-                free(result[i]);
+        if (token_length > 0) { // Copy the token to the static array
+            for (size_t i = 0; i < token_length; i++) {
+                tokens[token_index][i] = token_start[i];
             }
-            free(result);
-            return NULL;
+            tokens[token_index][token_length] = '\0'; // Null-terminate the token
+            result[token_index] = tokens[token_index]; // Store the pointer to the token
+            token_index++;
         }
-        for (size_t i = 0; i < token_length; i++) {
-            token[i] = token_start[i];
-        }
-        token[token_length] = '\0';
-        result[token_index++] = token;                  // Store the token in the result array
     }
 
-    // Null-terminate the array
-    result[token_index] = NULL;
+    result[token_index] = NULL; // Null-terminate the array of pointers
 
-    // needed to free the malloc
     return result;
 }

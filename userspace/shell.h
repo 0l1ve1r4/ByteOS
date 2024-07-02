@@ -11,8 +11,10 @@
 #ifndef SHELL_H
 #define SHELL_H
 
-#pragma GCC diagnostic ignored "-Wbuiltin-declaration-mismatch"
-#include "../types.h"
+#include <stdint.h>
+#include <stddef.h>
+
+#pragma GCC diagnostic ignored "-Wbuiltin-declaration-mismatch" // Ignore GCC warning
 
 #define OS_PROMPT " _               _       ___  ____  \n"\
                   "| |__   __ _ ___(_) ___ / _ \\/ ___| \n"\
@@ -22,17 +24,17 @@
                   "A x86 kernel written from scratch!\n\n"
 
 #define MAX_COMMAND_LENGTH 100      
-#define SHELL_PROMPT "root@basicOS"
 
 // Function prototypes based on MINIX implementation
-_PROTOTYPE( size_t num_builtins, (void)              );
-_PROTOTYPE( void shell, (char* command)              );
-_PROTOTYPE( void shell_init, (char** args)           );
-_PROTOTYPE( void shell_exit, (char** args)           );
-_PROTOTYPE( void shell_echo, (char** args)           );
-_PROTOTYPE( void shell_clear, (char** args)          );
-_PROTOTYPE( void shell_help, (char** args)           );
-_PROTOTYPE( void shell_status, (char** args)         );
-_PROTOTYPE( void shell_color, (char** args)          );
+void shell_initialize (void);
+
+size_t num_builtins(void);
+void shell(char* command);
+void shell_exit(char** args);
+void shell_echo(char** args);
+void shell_clear(char** args);
+void shell_help(char** args);
+void shell_status(char** args);
+void shell_color(char** args);
 
 #endif // SHELL_H
