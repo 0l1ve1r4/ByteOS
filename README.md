@@ -13,8 +13,6 @@
 > 
 > This project is still in very early stages, test on real hardware at your own risk. 
 
----
-
 ## Built-in Libs
 
 ### Full Built-in
@@ -26,7 +24,6 @@
 - **stdio.h**: Input/output.
 - **stdlib.h**: Standard Library.
 
-### Roadmap 
 ## Roadmap
 
 - **[X]** Make the [Meaty Skeleton](https://osdev.wiki/wiki/Meaty_Skeleton)
