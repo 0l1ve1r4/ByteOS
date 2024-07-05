@@ -1,10 +1,12 @@
 #include <kernel/tty.h>
 #include <sys/idt.h>
 #include <drivers/keyboard.h>
+#include <drivers/rtc.h>
 
 #include <stdio.h>
 #include <shell.h>
 
+/* Obs: in printf is used %m to use ansii colors */
 const char* ansi_green = "\033[32m";
 const char* ansi_red = "\033[31m";
 const char* ansi_lightgrey = "\033[37m";
@@ -29,9 +31,8 @@ void kernel_main(void) {
 	kernel_debug("IDT initialized", 0);
 	keyboard_initialize();
 	kernel_debug("Keyboard initialized", 0);
-
+	kernel_debug("Operating System initialized", 0);
+	
     shell_initialize();
-    
-
 
 }

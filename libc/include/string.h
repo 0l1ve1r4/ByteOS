@@ -14,7 +14,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif 
 
 void *memcpy(void * restrict s1, const void * restrict s2, size_t n);
 
@@ -62,6 +62,6 @@ size_t strlen(const char *s);
 
 #ifdef __cplusplus
 }
-#endif
+#endif /* __cplusplus */
 
-#endif
+#endif /* _STRING_H */

@@ -6,53 +6,21 @@
 #include <sys/idt.h>
 #include <utils/ports.h>
 
-#define IDT_SIZE 256                                    // IDT size
-#define INTERRUPT_GATE 0x8e                             // Interrupt gate flag
-#define KERNEL_CODE_SEGMENT_OFFSET 0x08                 // Kernel code segment offset
+#define IDT_SIZE 0xFF                               
+#define INTERRUPT_GATE 0x8e                    
+#define KERNEL_CODE_SEGMENT_OFFSET 0x08              
 
 typedef struct IDT_entry {
     uint16_t offset_lowerbits;
-    uint16_t selector;                                  // Kernel segment selector (0x08)
+    uint16_t selector;                                 
     uint8_t zero;
     uint8_t type_attr;
     uint16_t offset_higherbits;
-} IDT_entry_t;
+} __attribute__((packed)) IDT_entry_t;
 
-extern void keyboard_handler(void);
-
-void remap_PIC(void);
 IDT_entry_t IDT[IDT_SIZE];
 
-void idt_initialize(void) {
-	uint32_t keyboard_address;
-	uint32_t idt_address;
-	uint32_t idt_ptr[2];
-
-	/* populate IDT entry of keyboard's interrupt */
-	keyboard_address = (unsigned long)keyboard_handler;
-	IDT[0x21].offset_lowerbits = keyboard_address & 0xffff;
-	IDT[0x21].selector = KERNEL_CODE_SEGMENT_OFFSET;
-	IDT[0x21].zero = 0;
-	IDT[0x21].type_attr = INTERRUPT_GATE;
-	IDT[0x21].offset_higherbits = (keyboard_address & 0xffff0000) >> 16;
-
-	/*     Ports
-	*	 PIC1	PIC2
-	*Command 0x20	0xA0
-	*Data	 0x21	0xA1
-	*/
-
-	remap_PIC();
-
-	/* fill the IDT descriptor */
-	idt_address = (uint32_t)IDT ;
-	idt_ptr[0] = (sizeof (struct IDT_entry) * IDT_SIZE) + ((idt_address & 0xffff) << 16);
-	idt_ptr[1] = idt_address >> 16 ;
-
-	load_idt(idt_ptr);
-}
-
-void remap_PIC(void) {
+static void remap_PIC(void) {
     // ICW1: Start initialization of PIC
     outb(0x20, 0x11); // Master PIC
     outb(0xA0, 0x11); // Slave PIC
@@ -74,3 +42,30 @@ void remap_PIC(void) {
     outb(0x21, 0xFF);
     outb(0xA1, 0xFF);
 }
+
+extern void keyboard_handler(void);
+static void load_keyboard_interrupt(void){
+    /* populate IDT entry of keyboard's interrupt */
+	uint32_t keyboard_address = (unsigned long)keyboard_handler;
+	IDT[0x21].offset_lowerbits = keyboard_address & 0xffff;
+	IDT[0x21].selector = KERNEL_CODE_SEGMENT_OFFSET;
+	IDT[0x21].zero = 0;
+	IDT[0x21].type_attr = INTERRUPT_GATE;
+	IDT[0x21].offset_higherbits = (keyboard_address & 0xffff0000) >> 16;
+}
+
+void idt_initialize(void) {
+	uint32_t idt_address;
+	uint32_t idt_ptr[2];
+
+    load_keyboard_interrupt();
+	remap_PIC();
+
+	/* fill the IDT descriptor */
+	idt_address = (uint32_t)IDT ;
+	idt_ptr[0] = (sizeof (struct IDT_entry) * IDT_SIZE) + ((idt_address & 0xffff) << 16);
+	idt_ptr[1] = idt_address >> 16 ;
+
+	load_idt(idt_ptr);
+}
+

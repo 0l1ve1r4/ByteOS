@@ -27,11 +27,11 @@ CPPFLAGS:=$(CPPFLAGS) $(KERNEL_ARCH_CPPFLAGS)
 LDFLAGS:=$(LDFLAGS) $(KERNEL_ARCH_LDFLAGS)
 LIBS:=$(LIBS) $(KERNEL_ARCH_LIBS)
 
+KERNEL_FILES = $(wildcard kernel/*.c)
+
 KERNEL_OBJS=\
 $(KERNEL_ARCH_OBJS) \
-kernel/kernel.o \
-kernel/idt.o \
-kernel/keyboard.o \
+$(KERNEL_FILES:.c=.o) \
 
 OBJS=\
 $(ARCHDIR)/crti.o \

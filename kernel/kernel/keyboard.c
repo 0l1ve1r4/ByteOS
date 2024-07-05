@@ -27,6 +27,7 @@ void handle_keycode(char keycode);
 void handle_enter_key(void);
 void handle_backspace_key(void);
 void handle_capslock_key(void);
+void handle_lshift_key(void);
 void handle_default_key(char keycode);
 
 char characterTable[] = {
@@ -44,7 +45,15 @@ char characterTable[] = {
     0,    0,    0,    0,    0,    0,    0,    0x2C
     };
 
+char characterTableShift[] = {
+    0,    0,    '!',  '@',  '#',  '$',  '%',  '^',  '&',  '*',  '(',  ')',
+    '_',  '+',  0,    0x09, 'Q',  'W',  'E',  'R',  'T',  'Y',  'U',  'I',
+    'O',  'P',  '{',  '}',  0,    0,    'A',  'S',  'D',  'F',  'G',  'H',
+    'J',  'K',  'L',  ':',  '"',  '~',  0,    '|',  'Z',  'X',  'C',  'V',
+    'B',  'N',  'M',  '<',  '>',  '?',  0,    '*',  0,    ' ',  0,    0,
+};
 
+bool lshift = false;
 bool capslock = false;
 bool in_scanf = false;
 
@@ -93,6 +102,10 @@ void handle_keycode(char keycode) {
             handle_capslock_key();
             break;
 
+        case LSHIFT_KEY_CODE:
+            handle_lshift_key();
+            break;
+
         default:
             handle_default_key(keycode);
             break;
@@ -125,15 +138,25 @@ void handle_capslock_key(void) {
     capslock = !capslock;
 }
 
+void handle_lshift_key(void){
+    lshift = !lshift;
+}
+
 void handle_default_key(char keycode) {
-    uint8_t character = characterTable[(uint8_t)keycode];
-    if (capslock) {
-        character -= 32;
+    uint8_t c;
+    if (lshift){
+        c = characterTableShift[(uint8_t)keycode];
+    } else {
+        c = characterTable[(uint8_t)keycode];
     }
 
-    input_buffer[input_buffer_index++] = character;
+    if (capslock) {
+        c -= 32;
+    }
+
+    input_buffer[input_buffer_index++] = c;
     if (in_scanf) {
-        terminal_putchar(character);
+        terminal_putchar(c);
     }
 
 }

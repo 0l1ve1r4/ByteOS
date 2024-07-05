@@ -33,6 +33,7 @@ stdio/*.c 			\
 stdlib/*.c 			\
 string/*.c			\
 shell/*.c			\
+time/*.c			\
 )
 
 FREEOBJS=\

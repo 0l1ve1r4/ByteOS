@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 /* Return the number of builtins shell commands */
 size_t num_builtins(void);
@@ -52,6 +53,7 @@ char* builtin_desc[] = {
 // Clear the screen and show the OS prompt
 void shell_initialize(void) {
     printf(OS_PROMPT);
+    printf("Now is: %s | Type 'help' to see all commands\n", asctime());
 
     while (1) {
         printf("\n");

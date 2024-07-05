@@ -47,4 +47,13 @@ void terminal_clear_all(void);
 /* Clear a character */
 void terminal_clear_char(int size);
 
+/* Hide the VGA cursor */
+void hide_vga_cursor(void);
+
+/* Show the VGA cursor */
+void show_vga_cursor(void);
+
+/* Update the VGA cursor */
+void update_vga_cursor(uint16_t pos);
+
 #endif
