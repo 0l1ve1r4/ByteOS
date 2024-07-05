@@ -1,18 +1,37 @@
-#include <stdio.h>
-#include <string.h>
 #include <kernel/tty.h>
+#include <sys/idt.h>
+#include <drivers/keyboard.h>
+
+#include <stdio.h>
+#include <shell.h>
+
+const char* ansi_green = "\033[32m";
+const char* ansi_red = "\033[31m";
+const char* ansi_lightgrey = "\033[37m";
 
 #if !defined(__i386__)
 #error "Must be compiled with an ix86-elf compiler."
 #endif
 
+static void kernel_debug(char* str, int status){
+	if(status == 0){
+		printf("%m[ OK ]%m %s\n", ansi_green, ansi_lightgrey, str);
+	}else{
+		printf("%m[FAIL]%m %s\n", ansi_red, ansi_lightgrey, str);
+	}
+}
+
 void kernel_main(void) {
 	terminal_initialize();
-	
-	printf("basicOS kernel\n");
 
-	char buffer[255];
-	strcpy(buffer, "strcpy test\n");
-	printf(buffer);
+	kernel_debug("Terminal initialized", 0);
+	idt_initialize();
+	kernel_debug("IDT initialized", 0);
+	keyboard_initialize();
+	kernel_debug("Keyboard initialized", 0);
+
+    shell_initialize();
+    
+
 
 }

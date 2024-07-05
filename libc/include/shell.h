@@ -4,12 +4,14 @@
     under the terms of the GNU GPL3 or (at your option) any later version. */
 
 #ifndef SHELL_H
-#define SHELL_H
+#define SHELL_H 1
 
 #include <stdint.h>
 #include <stddef.h>
 
-#pragma GCC diagnostic ignored "-Wbuiltin-declaration-mismatch" // Ignore GCC warning
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define OS_PROMPT " _               _       ___  ____  \n"\
                   "| |__   __ _ ___(_) ___ / _ \\/ ___| \n"\
@@ -21,5 +23,9 @@
 #define MAX_COMMAND_LENGTH 100      
 
 void shell_initialize (void);
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus
 
 #endif // SHELL_H

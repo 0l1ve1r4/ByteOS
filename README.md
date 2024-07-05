@@ -27,10 +27,10 @@
 ## Roadmap
 
 - **[X]** Make the [Meaty Skeleton](https://osdev.wiki/wiki/Meaty_Skeleton)
-- **[X]** First steps
+- **[ ]** First steps
   - **[X]** VGA driver
-  - **[ ]** Interrupt handling
-  - **[ ]** PS/2 Keyboard support
+  - **[ ]** Interrupt Descriptor Table
+  - **[X]** PS/2 Keyboard support
 - **[ ]** RTC driver
 - **[ ]** ATA PIO mode hard disk driver (28 bit LBA)
 - **[ ]** FAT filesystem

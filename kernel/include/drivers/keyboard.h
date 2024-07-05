@@ -6,7 +6,13 @@
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
 
-void keyboard_initialize(void);     // Initialize the keyboard
-void keyboard_scanf(char *buffer);  // Read the keyboard input and store it in buffer
+/*  Handle the keyboard interrupt */
+void keyboard_handler(void);        
+
+/* Initialize the keyboard */
+void keyboard_initialize(void);      
+
+/* Read the keyboard input and store it in buffer */
+void keyboard_scanf(char *buffer);   
 
 #endif

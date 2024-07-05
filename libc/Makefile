@@ -27,36 +27,17 @@ CPPFLAGS:=$(CPPFLAGS) $(ARCH_CPPFLAGS)
 LIBK_CFLAGS:=$(LIBK_CFLAGS) $(KERNEL_ARCH_CFLAGS)
 LIBK_CPPFLAGS:=$(LIBK_CPPFLAGS) $(KERNEL_ARCH_CPPFLAGS)
 
+# ADD THE LIBRARIES FOLDERS HERE TO INCLUDE THEM IN THE BUILD #
+SRCS = $(wildcard 	\
+stdio/*.c 			\
+stdlib/*.c 			\
+string/*.c			\
+shell/*.c			\
+)
+
 FREEOBJS=\
 $(ARCH_FREEOBJS) \
-stdio/printf.o \
-stdio/putchar.o \
-stdio/puts.o \
-stdlib/abort.o \
-string/memcmp.o \
-string/memcpy.o \
-string/memmove.o \
-string/memset.o \
-string/strcat.o \
-string/strcmp.o \
-string/strcpy.o \
-string/strlen.o \
-string/strncat.o \
-string/strncpy.o \
-string/memcmp.o \
-string/strcoll.o \
-string/strncmp.o \
-string/strxfrm.o \
-string/memchr.o \
-string/strchr.o \
-string/strcspn.o \
-string/strpbrk.o \
-string/strrchr.o \
-string/strspn.o \
-string/strstr.o \
-string/strtok.o \
-string/strerror.o \
-
+$(SRCS:.c=.o)	\
 
 HOSTEDOBJS=\
 $(ARCH_HOSTEDOBJS) \

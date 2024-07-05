@@ -3,13 +3,13 @@
     This is free software: you can redistribute it and/or modify it 
     under the terms of the GNU GPL3 or (at your option) any later version. */
 
-#include "keyboard.h"           // Main header file
-#include "terminal.h"           // video driver
-#include "ports.h"              // read_port, write_port
+#include <drivers/keyboard.h>   
+#include <utils/ports.h>
+#include <kernel/tty.h>
 
-#include <stdint.h>             // uint8_t, etc.
-#include <stdbool.h>            // bool
-#include <stddef.h>             // size_t
+#include <stdint.h>            
+#include <stdbool.h>
+#include <stddef.h>             
 
 #define KEYBOARD_DATA_PORT      0x60
 #define KEYBOARD_STATUS_PORT    0x64
@@ -20,7 +20,6 @@
 
 /* Internal Functions */
 void read_input(char *buffer, size_t max_length);
-void keyboard_handler_main(void);
 void write_eoi(void);
 uint8_t read_keyboard_status(void);
 char read_keycode(void);
@@ -56,7 +55,7 @@ void keyboard_initialize(void) {
     write_port(0x21 , 0xFD);
 }
 
-void keyboard_handler_main(void) {
+void keyboard_handler(void) {
     write_eoi();
     uint8_t status = read_keyboard_status();
     if (status & 0x01) {
@@ -104,19 +103,22 @@ void handle_enter_key(void) {
     input_buffer[input_buffer_index] = '\0';            
     input_buffer_index = 0;
 
-    if (in_scanf){  
+    if (in_scanf){
+        terminal_newline();  
         in_scanf = false;
     }
-    terminal_newline();
+    
 }
 
 void handle_backspace_key(void) {
     if (input_buffer_index == 0) {              // Avoid deleting the prompt
         return;
     }
+    input_buffer_index--;
 
-    input_buffer_index = input_buffer_index > 0 ? input_buffer_index - 1 : 0;
-    terminal_clear_char(1);
+    if (in_scanf) {
+        terminal_clear_char(1);
+    }
 }
 
 void handle_capslock_key(void) {
@@ -130,8 +132,9 @@ void handle_default_key(char keycode) {
     }
 
     input_buffer[input_buffer_index++] = character;
-
-    terminal_printc(character);
+    if (in_scanf) {
+        terminal_putchar(character);
+    }
 
 }
 
@@ -154,8 +157,15 @@ void keyboard_scanf(char *buffer) {
 
     // Wait for Enter key press
     while (in_scanf) {
-        read_keyboard_status();
-    }   // keyboard_handler_main is running in the background, so it will handle the Enter key press
+        uint8_t status = read_keyboard_status();
+        if (status & 0x01) {
+            char keycode = read_keycode();
+            if (keycode < 0) {
+                continue;
+            }
+            handle_keycode(keycode);
+        }
+    }  
 
     // Copy the input buffer to the provided buffer
     read_input(buffer, 256);

@@ -1,4 +1,9 @@
 #!/bin/sh
+
+# clean the previous build
+
+./clean.sh
+
 set -e
 . ./headers.sh
 
