@@ -62,11 +62,11 @@ void shell_initialize(void) {
     shell_date(NULL);
 
     while (1) {
+        char buffer[256];
+        memset(buffer, '\0', 256);
+        
         printf("\n");
         printf("root@%mkernel%m:$/ ", "\033[92m", "\033[37m");
-
-        char buffer[256];
-        memset(buffer, 0, 256);
 
         scanf(buffer);
         shell(buffer);
@@ -123,7 +123,7 @@ void shell_help(char** args){
     uint8_t description = strcmp(args[0], "-d");
     description == 0 ? printf("Available commands:\n") : printf("Available commands (use -d to show more):\n");    
     printf("\n");
-    
+        
     for (uint8_t i = 0; i < num_builtins(); i++) {
         printf("| %s", builtin_str[i]);
         

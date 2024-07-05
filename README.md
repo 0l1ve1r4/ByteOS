@@ -88,12 +88,7 @@ Make sure you have the following tools installed:
 
 2. Build and run the project:
    ```bash
-   ./build.sh
-   ```
-
-3. Run with QEMU (recommended):
-   ```bash
-   qemu-system-i386 -kernel $HOME/sysroot/boot/myos.kernel
+   ./run.sh       # This will automatically clean, build and run the project with QEMU
    ```
 
 ## Contributing

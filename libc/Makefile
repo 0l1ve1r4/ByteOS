@@ -1,6 +1,7 @@
-DEFAULT_HOST!=../default-host.sh
-HOST?=DEFAULT_HOST
-HOSTARCH!=../target-triplet-to-arch.sh $(HOST)
+DEFAULT_HOST := $(shell ../run.sh host)
+HOST ?= $(DEFAULT_HOST)
+HOSTARCH := $(shell ../run.sh target $(HOST))
+
 
 CFLAGS?=-O2 -g
 CPPFLAGS?=

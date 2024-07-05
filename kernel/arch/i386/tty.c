@@ -55,7 +55,7 @@ void terminal_putchar(char c) {
     terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
     if (++terminal_column >= VGA_WIDTH) {
         terminal_column = 0;
-        if (++terminal_row == VGA_HEIGHT)
+        if (terminal_row++ == VGA_HEIGHT)
             terminal_roll();
     }
     update_vga_cursor(last_wrote_index);
@@ -98,16 +98,19 @@ void terminal_clear_char(int size) {
 }
 
 void terminal_roll(void) {
-    for (size_t l = 0; l < terminal_row; l++) {
+    /* Move all the rows up */
+    for (size_t l = 1; l < terminal_row; l++) {
         for (size_t c = 0; c < VGA_WIDTH; c++) {
             size_t index = l * VGA_WIDTH + c;
             terminal_putentryat(terminal_buffer[index], terminal_buffer[index] >> 8, c, l - 1);
         }
     }
+
+    /* Clear the last row */
     for (size_t c = 0; c < VGA_WIDTH; c++) {
         terminal_putentryat(' ', VGA_COLOR_BLACK, c, terminal_row - 1);
     }
-    terminal_row--;
+    terminal_row = VGA_HEIGHT - 1;
 }
 
 void hide_vga_cursor(void) {
