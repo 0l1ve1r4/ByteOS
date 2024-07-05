@@ -1,17 +1,22 @@
 #include <drivers/rtc.h>
 #include <utils/ports.h>
 
+#include <stdio.h>
+
+static const char* rtc_startup_time;
+static const char* rtc_startup_date;   
+
 enum CMOS_Registers {
     CMOS_ADDRESS = 0x70,
     CMOS_DATA = 0x71
 };
 
-static unsigned char get_RTC_register(int reg) {
+static uint8_t get_RTC_register(int reg) {
     outb(CMOS_ADDRESS, reg);
     return inb(CMOS_DATA);
 }
 
-static unsigned char get_time_unit(int reg) {
+static uint8_t get_time_unit(int reg) {
     uint8_t unit = get_RTC_register(reg);
     uint8_t registerB = get_RTC_register(0x0B);
     if (!(registerB & 0x04)) {
@@ -49,4 +54,10 @@ const char* get_time(void) {
     return unit_converter(get_time_unit(0x04), 
             get_time_unit(0x02), 
             get_time_unit(0x00), ':');
+}
+
+void rtc_initialize(void){
+    rtc_startup_time = get_time();
+    rtc_startup_date = get_date();
+
 }

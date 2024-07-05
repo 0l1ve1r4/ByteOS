@@ -24,13 +24,7 @@ void shell_clear(char** args);
 void shell_help(char** args);
 void shell_status(char** args);
 void shell_color(char** args);
-
-/* Count the number of tokens in a string */
-size_t count_tokens(const char* str, char delim);
-
-/* Split a string into tokens */
-char** split_str(const char* str, char delim);
-
+void shell_date(char** args);
 
 char* builtin_str[] = {
     "poweroff",
@@ -38,7 +32,8 @@ char* builtin_str[] = {
     "clear",
     "help",
     "status",
-    "color"
+    "color",
+    "date",
 };
 
 char* builtin_desc[] = {
@@ -47,28 +42,9 @@ char* builtin_desc[] = {
     "Clear the screen",
     "Show this help message",
     "Show the status of the system",
-    "Change the color of the shell"
+    "Change the color of the shell",
+    "Show the current date",
 };
-
-// Clear the screen and show the OS prompt
-void shell_initialize(void) {
-    printf(OS_PROMPT);
-    printf("Now is: %s | Type 'help' to see all commands\n", asctime());
-
-    while (1) {
-        printf("\n");
-        printf("root@%mkernel%m:$/ ", "\033[92m", "\033[37m");
-
-        char buffer[256];
-        buffer[0] = '\0';
-
-        // Wait for input and store it in buffer
-        scanf(buffer);
-
-        // Process the input with the shell
-        shell(buffer);
-    }
-} 
 
 void (*builtin_func[]) (char**) = {
     &shell_exit,
@@ -76,8 +52,26 @@ void (*builtin_func[]) (char**) = {
     &shell_clear,
     &shell_help,
     &shell_status,
-    &shell_color
+    &shell_color,
+    &shell_date
 };
+
+// Clear the screen and show the OS prompt
+void shell_initialize(void) {
+    printf(OS_PROMPT);
+    shell_date(NULL);
+
+    while (1) {
+        printf("\n");
+        printf("root@%mkernel%m:$/ ", "\033[92m", "\033[37m");
+
+        char buffer[256];
+        memset(buffer, 0, 256);
+
+        scanf(buffer);
+        shell(buffer);
+    }
+} 
 
 size_t num_builtins() {
     return sizeof(builtin_str) / sizeof(char *);
@@ -149,53 +143,12 @@ void shell_color(char** args){
     return;
 }
 
+void shell_date(char** args){
+    tm *time = gmtime();
+    printf("Date: %s | Time: %s\n", time->date_str, time->time_str);
+    
+}
+
 #pragma GCC diagnostic pop
 
 
-size_t count_tokens(const char* str, char delim) {
-    size_t count = 0;
-    uint32_t in_token = 0;
-    while (*str) {
-        if (*str == delim) {
-            in_token = 0;
-        } else if (!in_token) {                         // Start of a new token
-            in_token = 1;
-            count++;
-        }
-        str++;
-    }
-    return count;
-}
-
-char** split_str(const char* str, char delim) {
-    static char tokens[UINT8_MAX][UINT8_MAX]; // Static array for tokens
-    static char* result[UINT8_MAX + 1];              // Static array for pointers to tokens
-    size_t token_index = 0;
-
-    while (*str && token_index < UINT8_MAX) {
-        while (*str == delim) { // Skip delimiters
-            str++;
-        }
-
-        const char* token_start = str; // Find the end of the token
-        size_t token_length = 0;
-
-        while (*str && *str != delim && token_length < UINT8_MAX - 1) {
-            str++;
-            token_length++;
-        }
-
-        if (token_length > 0) { // Copy the token to the static array
-            for (size_t i = 0; i < token_length; i++) {
-                tokens[token_index][i] = token_start[i];
-            }
-            tokens[token_index][token_length] = '\0'; // Null-terminate the token
-            result[token_index] = tokens[token_index]; // Store the pointer to the token
-            token_index++;
-        }
-    }
-
-    result[token_index] = NULL; // Null-terminate the array of pointers
-
-    return result;
-}

@@ -16,6 +16,7 @@
 > This project is still in very early stages. Test on real hardware at your own risk.
 
 ## Table of Contents
+
 - [Project Description](#project-description)
 - [Installation](#installation)
 - [Contributing](#contributing)
@@ -60,6 +61,7 @@ To maintain control and ensure that the system operates almost entirely from scr
 #### Building a Cross-Compiler
 
 BasicOS uses an `i686-elf-gcc` cross-compiler. The versions used to build the project are:
+
 - binutils-2.40
 - gcc-12.2.0
 
@@ -70,6 +72,7 @@ For detailed instructions on building and using a cross-compiler, refer to the [
 #### Required Tools
 
 Make sure you have the following tools installed:
+
 - i686-elf toolchain.
 - GRUB, for the `grub-mkrescue` command, along with the appropriate runtime files.
 - Xorriso, the ISO creation engine used by `grub-mkrescue`.

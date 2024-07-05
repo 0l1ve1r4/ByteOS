@@ -16,49 +16,79 @@
 extern "C" {
 #endif 
 
+/* Copy n characters from src to dest. */ 
 void *memcpy(void * restrict s1, const void * restrict s2, size_t n);
 
+/* Move n characters from src to dest, handling overlapping memory blocks correctly. */ 
 void *memmove(void *s1, const void *s2, size_t n);
 
+/* Copy the string pointed by src to dest. */ 
 char *strcpy(char* restrict dest, const char* restrict src); 
 
+/* Copy at most n characters from the string pointed by s2 to s1. */ 
 char *strncpy(char * restrict s1, const char * restrict s2, size_t n);
 
+/* Concatenate the string pointed by s2 to the string pointed by s1. */ 
 char *strcat(char * restrict s1, const char * restrict s2);
 
+/* Concatenate at most n characters from the string pointed by s2 to the string pointed by s1. */ 
 char *strncat(char * restrict s1, const char * restrict s2, size_t n);
 
+/* Compare the first n characters of two memory blocks. */ 
 int memcmp(const void *s1, const void *s2, size_t n);
 
+/* Compare two strings. */ 
 int strcmp(const char *s1, const char *s2);
 
-int strcoll(const char *s1, const char *s2);    // TODO
+/* Compare two strings using the current locale. */ 
+int strcoll(const char *s1, const char *s2);    
 
-int strncmp(const char *s1, const char *s2, size_t n); // TODO
+/* Compare at most the first n characters of two strings. */ 
+int strncmp(const char *s1, const char *s2, size_t n); 
 
-size_t strxfrm(char * restrict s1, const char * restrict s2, size_t n); // TODO
+/* Transform the string pointed by s2 and place the resulting string into s1. */ 
+size_t strxfrm(char * restrict s1, const char * restrict s2, size_t n); 
 
-void *memchr(const void *s, int c, size_t n); // TODO
+/* Search for the first occurrence of the character c in the first n characters of the string pointed by s. */ 
+void *memchr(const void *s, int c, size_t n); 
 
-char *strchr(const char *s, int c); // TODO
+/* Search for the first occurrence of the character c in the string pointed by s. */ 
+char *strchr(const char *s, int c); 
 
-size_t strcspn(const char *s1, const char *s2); // TODO
+/* Calculate the length of the initial segment of the string pointed by s1 which consists only of characters not in the string pointed by s2. */ 
+size_t strcspn(const char *s1, const char *s2); 
 
-char *strpbrk(const char *s1, const char *s2); // TODO
+/* Search for the first occurrence of any character from the string pointed by s2 in the string pointed by s1. */ 
+char *strpbrk(const char *s1, const char *s2); 
 
-char *strrchr(const char *s, int c); // TODO
+/* Search for the first occurrence of the character c in the string pointed by s, but searching in reverse order. */ 
+char *strrchr(const char *s, int c); 
 
-size_t strspn(const char *s1, const char *s2); // TODO
+/* Calculate the length of the initial segment of the string pointed by s1 which consists only of characters from the string pointed by s2. */ 
+size_t strspn(const char *s1, const char *s2); 
 
-char *strstr(const char *s1, const char *s2); // TODO
+/* Locate the first occurrence in the string pointed by s1 of any character from the string pointed by s2, excluding the terminating null character. */ 
+char *strstr(const char *s1, const char *s2); 
 
-char *strtok(char * restrict s1, const char * restrict s2); // TODO
+/* Split a string into tokens. */ 
+char** split_str(const char* str, char delim);
 
+/* Copy n characters from src to dest */
 void *memset(void *s, int c, size_t n);
 
-char *strerror(int errnum); // TODO
+/* Return a pointer to the error message string */
+char *strerror(int errnum); 
 
+/* Return the length of the string */
 size_t strlen(const char *s);
+
+/* ======== Extras functions ======== */
+
+/* Count the number of tokens in a string */
+size_t count_tokens(const char* str, char delim);
+
+/* Split a string into tokens */
+char** split_str(const char* str, char delim);
 
 #ifdef __cplusplus
 }
