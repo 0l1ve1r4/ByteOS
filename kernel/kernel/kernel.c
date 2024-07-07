@@ -17,9 +17,9 @@ const char* ansi_lightgrey = "\033[37m";
 
 static void kernel_debug(char* str, int status){
 	if(status == 0){
-		printf("%m[ OK ]%m %s\n", ansi_green, ansi_lightgrey, str);
+		printf("%s[ OK ]%s %s\n", ansi_green, ansi_lightgrey, str);
 	}else{
-		printf("%m[FAIL]%m %s\n", ansi_red, ansi_lightgrey, str);
+		printf("%s[FAIL]%s %s\n", ansi_red, ansi_lightgrey, str);
 	}
 }
 

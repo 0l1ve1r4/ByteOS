@@ -14,7 +14,7 @@ extern "C" {
 int scanf(char* buffer); // TODO: make the correct implementation
 
 /* Converts, formats, and writes the data to the character string under control of format. */
-int snprintf(char *s, size_t n, const char *format, ...);
+int snprintf(const char *s, size_t n, const char *format, ...);
 
 /* writes output to the standard output stream stdout. */
 int printf(const char* __restrict, ...);

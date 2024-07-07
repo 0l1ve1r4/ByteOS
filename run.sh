@@ -32,11 +32,11 @@ PROJECTS="libc kernel"
 
 # ======================= Environment =====================
 
-export MAKE=${MAKE:-make}
-export HOST=${HOST:-$(./run.sh host)}
-export AR=${HOST}-ar
-export AS=${HOST}-as
-export CC=${HOST}-gcc
+export MAKE="${MAKE:-make}"
+export HOST="${HOST:-$(./run.sh host)}"
+export AR="${HOST}-ar"
+export AS="${HOST}-as"
+export CC="${HOST}-gcc"
 export PREFIX=/usr
 export EXEC_PREFIX=$PREFIX
 export BOOTDIR=/boot
@@ -59,27 +59,28 @@ headers() {
   set -e
   mkdir -p "$SYSROOT"
   for PROJECT in $SYSTEM_HEADER_PROJECTS; do
-    (cd $PROJECT && DESTDIR="$SYSROOT" $MAKE install-headers)
+    (cd "$PROJECT" && DESTDIR="$SYSROOT" "$MAKE" install-headers)
   done
 }
 
 build() {
   set -e
   for PROJECT in $PROJECTS; do
-    (cd $PROJECT && DESTDIR="$SYSROOT" $MAKE install)
+    (cd "$PROJECT" && DESTDIR="$SYSROOT" "$MAKE" install)
   done
 }
 
 clean() {
   set -e
   for PROJECT in $PROJECTS; do
-    (cd $PROJECT && $MAKE clean)
+    (cd "$PROJECT" && "$MAKE" clean)
   done
   rm -rf sysroot isodir myos.iso $HOME/sysroot
 }
 
 run() {
-  qemu-system-i386 -kernel $HOME/sysroot/boot/myos.kernel
+  qemu-system-i386 -kernel "$HOME/sysroot/boot/myos.kernel"
+
 }
 
 # ======================= Main =============================

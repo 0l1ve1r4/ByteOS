@@ -14,19 +14,6 @@ static void printl(void) {
 		terminal_newline();	
 }
 
-static bool print(const char* data, size_t length) {
-    const unsigned char* bytes = (const unsigned char*) data;
-    for (size_t i = 0; i < length; i++) {
-        if (bytes[i] == '\n') {            
-            printl();
-        } else {
-            if (putchar(bytes[i]) == EOF)
-                return false;
-        }
-    }
-    return true;
-}
-
 const char* ansicolors[] = {
     "\033[30m", // Black
     "\033[34m", // Blue
@@ -47,8 +34,8 @@ const char* ansicolors[] = {
 };
 const int max_ansicolor_size = 6;
 
-void verify_ansi_colors(const char* format) {
-    char ansi_code[max_ansicolor_size];
+void verify_ansi_colors(const unsigned char* format) {
+    char ansi_code[max_ansicolor_size];    
     uint8_t ansi_index = 0;
 
     // Copy the ANSI code into ansi_code array
@@ -70,6 +57,23 @@ void verify_ansi_colors(const char* format) {
     }
 }
 
+static bool print(const char* data, size_t length) {
+    const unsigned char* bytes = (const unsigned char*) data;
+    for (size_t i = 0; i < length; i++) {
+        if (bytes[i] == '\033') {
+            verify_ansi_colors(&bytes[i]);
+            i += max_ansicolor_size;
+        }
+        
+        else if (bytes[i] == '\n') {            
+            printl();
+        } else {
+            if (putchar(bytes[i]) == EOF)
+                return false;
+        }
+    }
+    return true;
+}
 
 int printf(const char* restrict format, ...) {
     va_list parameters;
@@ -98,13 +102,7 @@ int printf(const char* restrict format, ...) {
 
         const char* format_begun_at = format++;
 
-        if (*format == 'm') {
-            format++;
-            const char* color = va_arg(parameters, const char*);
-            verify_ansi_colors(color);
-        }
-
-        else if (*format == 'c') {
+        if (*format == 'c') {
             format++;
             char c = (char) va_arg(parameters, int /* char promotes to int */);
             if (!maxrem) {

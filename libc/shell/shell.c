@@ -66,7 +66,7 @@ void shell_initialize(void) {
         memset(buffer, '\0', 256);
         
         printf("\n");
-        printf("root@%mkernel%m:$/ ", "\033[92m", "\033[37m");
+        printf("root@%skernel%s:$/ ", "\033[92m", "\033[37m");
 
         scanf(buffer);
         shell(buffer);
