@@ -2,6 +2,8 @@
 
 # ======================= Architecture ====================
 
+# Remember to add your cross compiler on your ~/.bashrc or ~/.profile
+# export PATH="$HOME/opt/cross/bin:$PATH"
 DEFAULT_TARGET=i686-elf
 
 # ======================= Arguments =======================
@@ -45,7 +47,7 @@ export INCLUDEDIR=$PREFIX/include
 export CFLAGS='-O2 -g'
 export CPPFLAGS=''
 export SYSROOT="$HOME/sysroot"
-export CC="i686-elf-gcc --sysroot=$SYSROOT"
+export CC="i686-elf-gcc --sysroot=$SYSROOT -Wall -Wextra -Werror -Wpedantic"
 
 # ======================= Build ===========================
 

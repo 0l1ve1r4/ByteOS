@@ -11,13 +11,13 @@ extern "C" {
 #endif
 
 /* reads from the standard input stream stdin. */
-int scanf(char* buffer); // TODO: make the correct implementation
+int scanf(const char *format, ...);
 
 /* Converts, formats, and writes the data to the character string under control of format. */
-int snprintf(const char *s, size_t n, const char *format, ...);
+int snprintf(const char * restrict s, size_t n, const char * restrict format, ...);
 
 /* writes output to the standard output stream stdout. */
-int printf(const char* __restrict, ...);
+int printf(const char * restrict format, ...);
 
 /* writes the character c (converted to an unsigned char) to stdout. */
 int putchar(int c);

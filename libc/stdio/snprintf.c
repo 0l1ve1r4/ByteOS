@@ -9,7 +9,7 @@ int snprintf_char(char *s, size_t n, int c);
 int vsnprintf_internal(char *s, size_t n, const char *format, va_list args);
 
 /* Write formatted output to sized buffer */
-int snprintf(char *s, size_t n, const char *format, ...) {
+int snprintf(char * restrict s, size_t n, const char * restrict format, ...) {
     va_list args;
     int count;
 

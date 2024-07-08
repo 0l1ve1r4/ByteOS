@@ -24,6 +24,7 @@ This project adheres to the Contributor Covenant Code of Conduct. By participati
 ### Reporting Bugs
 
 If you find a bug in the project, please check the [existing issues](https://github.com/iyksh/basicOS/issues) first. If the bug hasn't been reported yet, open a new issue and include as much detail as possible:
+
 - Steps to reproduce the bug
 - Expected and actual behavior
 - Screenshots, logs, or other supporting information
@@ -31,12 +32,14 @@ If you find a bug in the project, please check the [existing issues](https://git
 ### Suggesting Enhancements
 
 If you have ideas for new features or improvements, please check the [existing issues](https://github.com/iyksh/basicOS/issues) and the [project roadmap](https://github.com/iyksh/basicOS/projects). If your idea hasn't been suggested yet, open a new issue and describe your suggestion in detail:
+
 - What problem does the enhancement solve?
 - How would you like to see it implemented?
 
 ### Submitting Pull Requests
 
 To contribute code to basicOS, follow these steps:
+
 1. Fork the repository and clone your fork.
 2. Create a new branch for your feature or bugfix: `git checkout -b feature/your-feature-name` or `git checkout -b bugfix/your-bugfix-name`
 3. Make your changes, ensuring they adhere to the project's coding standards.
@@ -45,6 +48,7 @@ To contribute code to basicOS, follow these steps:
 6. Open a pull request from your branch to the `main` branch of the original repository.
 
 Please ensure your pull request includes:
+
 - A clear description of the changes
 - References to any related issues
 - Tests for your changes, if applicable

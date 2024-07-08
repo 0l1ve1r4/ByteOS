@@ -13,13 +13,13 @@
 extern "C" {
 #endif
 
-#define OS_PROMPT " _               _       ___  ____  \n"\
-                  "| |__   __ _ ___(_) ___ / _ \\/ ___| \n"\
-                  "| '_ \\ / _` / __| |/ __| | | \\___ \\ \n"\
-                  "| |_) | (_| \\__ \\ | (__| |_| |___) |\n"\
-                  "|_.__/ \\__,_|___/_|\\___|\\___/|____/ \n"\
-                  "A x86 kernel written from scratch!\n\n"
-
+#define OS_PROMPT (char*)   (" _               _       ___  ____  \n"\
+                            "| |__   __ _ ___(_) ___ / _ \\/ ___| \n"\
+                            "| '_ \\ / _` / __| |/ __| | | \\___ \\ \n"\
+                            "| |_) | (_| \\__ \\ | (__| |_| |___) |\n"\
+                            "|_.__/ \\__,_|___/_|\\___|\\___/|____/ \n"\
+                            "A x86 kernel written from scratch!\n\n")
+                            
 #define MAX_COMMAND_LENGTH 100      
 
 void shell_initialize (void);

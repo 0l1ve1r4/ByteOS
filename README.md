@@ -1,7 +1,5 @@
 ![Commit activity](https://img.shields.io/github/commit-activity/m/iyksh/basicOS)
-![Lines of code](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fghloc.vercel.app%2Fapi%2Fiyksh%2FbasicOS%2Fbadge%3Ffilter%3D.c%2C.asm%2C.h%2C.sh&query=%24.message&label=lines%20of%20code&color=red)
-![Repo Size](https://img.shields.io/github/repo-size/iyksh/basicOS)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/ddef159bc34148e4a89d2a600e9b61e5)](https://app.codacy.com/gh/iyksh/basicOS/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/9c8eee0fc7554427aa7100e8e6662ee5)](https://app.codacy.com/gh/iyksh/basicOS/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 ![GitHub top language](https://img.shields.io/github/languages/top/iyksh/basicOS?logo=c&label=)
 [![GitHub license](https://img.shields.io/github/license/iyksh/basicOS)](https://github.com/iyksh/basicOS/LICENSE)
 
@@ -36,23 +34,11 @@ To maintain control and ensure that the system operates almost entirely from scr
 
 - **string.h**: String manipulation utilities.
 
-#### Partially Completed Libraries
+#### Partially Made Libraries
 
 - **stdio.h**: Basic input/output functions.
 - **stdlib.h**: Standard utility functions.
 - **time.h**: Time management functions.
-
-### Roadmap
-
-- **Completed:**
-  - VGA driver for text output.
-  - Interrupt Descriptor Table (IDT) setup.
-  - PS/2 Keyboard support.
-  - Basic shell interface.
-  - Real-Time Clock (RTC) driver.
-- **In Progress:**
-  - ATA PIO mode hard disk driver (28-bit LBA).
-  - FAT filesystem support.
 
 ## Installation
 
@@ -74,8 +60,7 @@ For detailed instructions on building and using a cross-compiler, refer to the [
 Make sure you have the following tools installed:
 
 - i686-elf toolchain.
-- GRUB, for the `grub-mkrescue` command, along with the appropriate runtime files.
-- Xorriso, the ISO creation engine used by `grub-mkrescue`.
+- qemu-system-i386 for virtual machine.
 - GCC (GNU Compiler Collection).
 - LD (GNU Linker).
 
@@ -94,7 +79,6 @@ Make sure you have the following tools installed:
 ## Contributing
 
 Contributions are welcome! Whether it's reporting bugs, suggesting new features, or submitting pull requests, your involvement is appreciated. In this project, i am following this [OSDev.wiki](https://osdev.wiki/wiki/Creating_an_Operating_System) roadmap.
-
 
 ### Phase 0: Introduction
 

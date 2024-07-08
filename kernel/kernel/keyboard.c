@@ -11,12 +11,16 @@
 #include <stdbool.h>
 #include <stddef.h>             
 
+
+/* https://osdev.wiki/wiki/PS/2_Keyboard#Scan_Code_Sets */
 #define KEYBOARD_DATA_PORT      0x60
 #define KEYBOARD_STATUS_PORT    0x64
 #define CAPSLOCK_KEY_CODE       0x3A
 #define ENTER_KEY_CODE          0x1C
 #define BACKSPACE_KEY_CODE      0x0E
 #define LSHIFT_KEY_CODE         0x2A
+
+#define MAX_BUFFER_SIZE         255
 
 /* Internal Functions */
 void read_input(char *buffer, size_t max_length);
@@ -29,6 +33,7 @@ void handle_backspace_key(void);
 void handle_capslock_key(void);
 void handle_lshift_key(void);
 void handle_default_key(char keycode);
+void set_in_scanf(void);
 
 char characterTable[] = {
     0,    0,    '1',  '2',  '3',  '4',  '5',  '6',  '7',  '8',  '9',  '0',
@@ -124,7 +129,7 @@ void handle_enter_key(void) {
 }
 
 void handle_backspace_key(void) {
-    if (input_buffer_index == 0) {              // Avoid deleting the prompt
+    if (input_buffer_index == 0) {            
         return;
     }
     input_buffer_index--;
@@ -165,7 +170,7 @@ void handle_default_key(char keycode) {
 // Reads a line of input from the keyboard buffer
 void read_input(char *buffer, size_t max_length) {
     size_t index = 0;
-
+    
     while (index < max_length - 1 && input_buffer[index] != '\0') {
         buffer[index] = input_buffer[index];
         index++;
@@ -173,6 +178,7 @@ void read_input(char *buffer, size_t max_length) {
 
     buffer[index] = '\0';  // Null-terminate the string
 }
+
 
 // Waits for the user to press Enter and stores the input in the provided buffer
 void keyboard_scanf(char *buffer) {
@@ -189,7 +195,6 @@ void keyboard_scanf(char *buffer) {
             handle_keycode(keycode);
         }
     }  
-
     // Copy the input buffer to the provided buffer
-    read_input(buffer, 256);
+    read_input(buffer, MAX_BUFFER_SIZE);
 }

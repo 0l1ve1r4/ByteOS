@@ -58,7 +58,9 @@ void (*builtin_func[]) (char**) = {
 
 // Clear the screen and show the OS prompt
 void shell_initialize(void) {
-    printf(OS_PROMPT);
+    const char* os_promp = OS_PROMPT;
+    
+    printf(os_promp);
     shell_date(NULL);
 
     while (1) {
@@ -68,7 +70,7 @@ void shell_initialize(void) {
         printf("\n");
         printf("root@%skernel%s:$/ ", "\033[92m", "\033[37m");
 
-        scanf(buffer);
+        scanf("%d", &buffer);
         shell(buffer);
     }
 } 
@@ -92,8 +94,7 @@ void shell(char* command) {
     }
 
     if (status == 0){
-        printf("Command not found: ");
-        printf(command);
+        printf("Command [%s%s%s] not found.\n", "\033[91m", command, "\033[37m");
     }
 
 }

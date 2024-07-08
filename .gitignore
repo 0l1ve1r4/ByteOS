@@ -2,3 +2,4 @@
 *.iso
 isodir
 sysroot
+opt/
