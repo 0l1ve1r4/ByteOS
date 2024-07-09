@@ -1,6 +1,6 @@
-# Contributing to basicOS
+# Contributing to ByteOS
 
-Thank you for considering contributing to basicOS! Your help is greatly appreciated. This document provides guidelines for contributing to the project.
+Thank you for considering contributing to ByteOS! Your help is greatly appreciated. This document provides guidelines for contributing to the project.
 
 ## Table of Contents
 
@@ -23,7 +23,7 @@ This project adheres to the Contributor Covenant Code of Conduct. By participati
 
 ### Reporting Bugs
 
-If you find a bug in the project, please check the [existing issues](https://github.com/iyksh/basicOS/issues) first. If the bug hasn't been reported yet, open a new issue and include as much detail as possible:
+If you find a bug in the project, please check the [existing issues](https://github.com/iyksh/ByteOS/issues) first. If the bug hasn't been reported yet, open a new issue and include as much detail as possible:
 
 - Steps to reproduce the bug
 - Expected and actual behavior
@@ -31,14 +31,14 @@ If you find a bug in the project, please check the [existing issues](https://git
 
 ### Suggesting Enhancements
 
-If you have ideas for new features or improvements, please check the [existing issues](https://github.com/iyksh/basicOS/issues) and the [project roadmap](https://github.com/iyksh/basicOS/projects). If your idea hasn't been suggested yet, open a new issue and describe your suggestion in detail:
+If you have ideas for new features or improvements, please check the [existing issues](https://github.com/iyksh/ByteOS/issues) and the [project roadmap](https://github.com/iyksh/ByteOS/projects). If your idea hasn't been suggested yet, open a new issue and describe your suggestion in detail:
 
 - What problem does the enhancement solve?
 - How would you like to see it implemented?
 
 ### Submitting Pull Requests
 
-To contribute code to basicOS, follow these steps:
+To contribute code to ByteOS, follow these steps:
 
 1. Fork the repository and clone your fork.
 2. Create a new branch for your feature or bugfix: `git checkout -b feature/your-feature-name` or `git checkout -b bugfix/your-bugfix-name`
@@ -55,12 +55,12 @@ Please ensure your pull request includes:
 
 ## Development Setup
 
-To set up your development environment for basicOS, follow these instructions:
+To set up your development environment for ByteOS, follow these instructions:
 
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/iyksh/basicOS.git
-   cd basicOS
+   git clone https://github.com/iyksh/ByteOS.git
+   cd ByteOS
    ```
 
 2. **Install dependencies:**
@@ -96,7 +96,7 @@ To set up your development environment for basicOS, follow these instructions:
 ## Additional Resources
 
 - [OSDev Wiki](https://wiki.osdev.org): A comprehensive resource for operating system development.
-- [Project README](https://github.com/iyksh/basicOS/blob/main/README.md): Overview and objectives of the project.
-- [Existing Issues](https://github.com/iyksh/basicOS/issues): Current issues and enhancements under consideration.
+- [Project README](https://github.com/iyksh/ByteOS/blob/main/README.md): Overview and objectives of the project.
+- [Existing Issues](https://github.com/iyksh/ByteOS/issues): Current issues and enhancements under consideration.
 
 ---

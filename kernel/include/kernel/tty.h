@@ -30,7 +30,7 @@ void set_text_color(uint8_t color);
 void set_bg_color(uint8_t color);
 
 /* Initialize the terminal */
-void terminal_initialize(void);
+void init_tty(void);
 
 /* Insert a char in the current VGA buffer */
 void terminal_putchar(char c);

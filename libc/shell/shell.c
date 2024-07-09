@@ -1,4 +1,4 @@
-/* This file is part of basicOS, (©) Guilherme Oliveira Santos
+/* This file is part of ByteOS, (©) Guilherme Oliveira Santos
     This is free software: you can redistribute it and/or modify it 
     under the terms of the GNU GPL3 or (at your option) any later version.  */
 
@@ -58,9 +58,8 @@ void (*builtin_func[]) (char**) = {
 
 // Clear the screen and show the OS prompt
 void shell_initialize(void) {
-    const char* os_promp = OS_PROMPT;
     
-    printf(os_promp);
+    printf("\n          Welcome to Byte%sOS%s | ", "\033[92m", "\033[37m");
     shell_date(NULL);
 
     while (1) {
@@ -146,7 +145,7 @@ void shell_color(char** args){
 
 void shell_date(char** args){
     tm *time = gmtime();
-    printf("Date: %s | Time: %s\n", time->date_str, time->time_str);
+    printf("Date: %s | Time UTC: %s\n", time->date_str, time->time_str);
     
 }
 

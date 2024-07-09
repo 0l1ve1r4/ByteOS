@@ -34,7 +34,7 @@ void set_bg_color(uint8_t color) {
     set_color(VGA_COLOR_LIGHT_GREY, color);
 }
 
-void terminal_initialize(void) {
+void init_tty(void) {
     hide_vga_cursor();
     set_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
     terminal_buffer = VGA_MEMORY;

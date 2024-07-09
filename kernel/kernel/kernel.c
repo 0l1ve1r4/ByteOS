@@ -1,5 +1,5 @@
 #include <kernel/tty.h>
-#include <sys/idt.h>
+#include <kernel/x86.h>
 #include <drivers/keyboard.h>
 #include <drivers/rtc.h>
 
@@ -24,16 +24,22 @@ static void kernel_debug(char* str, int status){
 }
 
 void kernel_main(void) {
-	terminal_initialize();
+	init_tty();
 	kernel_debug("Terminal initialized", 0);
+	
+	init_GDT();
+	kernel_debug("GDT initialized", 0);
+	
+	init_IDT();
+	kernel_debug("IDT initialized", 0);
+	
+	init_IRQ();
+	kernel_debug("IRQ initialized", 0);
 	
 	rtc_initialize();
 	kernel_debug("RTC initialized", 0);
 
-	idt_initialize();
-	kernel_debug("IDT initialized", 0);
 	
-	keyboard_initialize();
 	kernel_debug("Keyboard initialized", 0);
 
 	kernel_debug("Operating System initialized", 0);

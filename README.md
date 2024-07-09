@@ -1,16 +1,16 @@
-![Commit activity](https://img.shields.io/github/commit-activity/m/iyksh/basicOS)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/9c8eee0fc7554427aa7100e8e6662ee5)](https://app.codacy.com/gh/iyksh/basicOS/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
-![GitHub top language](https://img.shields.io/github/languages/top/iyksh/basicOS?logo=c&label=)
-[![GitHub license](https://img.shields.io/github/license/iyksh/basicOS)](https://github.com/iyksh/basicOS/LICENSE)
+![Commit activity](https://img.shields.io/github/commit-activity/m/iyksh/ByteOS)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/9c8eee0fc7554427aa7100e8e6662ee5)](https://app.codacy.com/gh/iyksh/ByteOS/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+![GitHub top language](https://img.shields.io/github/languages/top/iyksh/ByteOS?logo=c&label=)
+[![GitHub license](https://img.shields.io/github/license/iyksh/ByteOS)](https://github.com/iyksh/ByteOS/LICENSE)
 
-# BasicOS - literally Basic
+# ByteOS
 
 ## Introduction
 
-**BasicOS** is a 32 bits operating system designed for educational purposes for those (me) interested in low-level systems programming. 
+**ByteOS** is a 32 bits operating system designed for educational purposes for those (me) interested in low-level systems programming. 
 
 > **NOTE**
-> 
+>
 > This project is still in very early stages. Test on real hardware at your own risk.
 
 ## Table of Contents
@@ -46,7 +46,7 @@ To maintain control and ensure that the system operates almost entirely from scr
 
 #### Building a Cross-Compiler
 
-BasicOS uses an `i686-elf-gcc` cross-compiler. The versions used to build the project are:
+ByteOS uses an `i686-elf-gcc` cross-compiler. The versions used to build the project are:
 
 - binutils-2.40
 - gcc-12.2.0
@@ -68,7 +68,7 @@ Make sure you have the following tools installed:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/iyksh/basicOS && cd basicOS
+   git clone https://github.com/iyksh/ByteOS && cd ByteOS
    ```
 
 2. Build and run the project:
@@ -92,9 +92,9 @@ Contributions are welcome! Whether it's reporting bugs, suggesting new features,
 - **[X] 2.3** Setting up a Project
 - **[X] 2.4** Calling Global Constructors
 - **[X] 2.5** Terminal Support
-- **[ ] 2.6** Stack Smash Protector
-- **[ ] 2.7** Multiboot
-- **[ ] 2.8** Global Descriptor Table
+- **[X] 2.6** Stack Smash Protector
+- **[X] 2.7** Multiboot
+- **[X] 2.8** Global Descriptor Table
 - **[ ] 2.9** Memory Management
 - **[ ] 2.10** Interrupts
 - **[ ] 2.11** Multithreaded Kernel
