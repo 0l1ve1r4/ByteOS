@@ -8,6 +8,4 @@
 void gmtime(tm* time){
     strcpy(time->date_buffer, get_date());
     strcpy(time->time_buffer, get_time());
-    time.date_str = date_buffer;
-    time.time_str = time_buffer;
 }
