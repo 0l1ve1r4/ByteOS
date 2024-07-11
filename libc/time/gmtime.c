@@ -5,15 +5,7 @@
 
 #include <drivers/rtc.h>
 
-tm *gmtime(void){
-    static tm time;
-    static char date_buffer[20];
-    static char time_buffer[20];
-    strcpy(date_buffer, get_date());
-    strcpy(time_buffer, get_time());
-
-    time.date_str = date_buffer;
-    time.time_str = time_buffer;
-
-    return &time; 
+void gmtime(tm* time){
+    strcpy(time->date_str, get_date());
+    strcpy(time->time_str, get_time());
 }

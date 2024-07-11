@@ -144,8 +144,13 @@ void shell_color(char** args){
 }
 
 void shell_date(char** args){
-    tm *time = gmtime();
-    printf("Date: %s | Time UTC: %s\n", time->date_str, time->time_str);
+    static tm time;
+    static char date_buffer[20];
+    static char time_buffer[20];
+    time.date_str = date_buffer;
+    time.time_str = time_buffer;
+    gmtime(&time);
+    printf("Date: %s | Time UTC: %s\n", time.date_str, time.time_str);
     
 }
 

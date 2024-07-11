@@ -18,7 +18,7 @@ typedef struct {
 } tm;
 
 /* Get the current date UTC */
-tm *gmtime(void);
+void gmtime(tm* time);
 
 /* Get the current date of the local time */
 tm *localtime(void);
