@@ -18,10 +18,13 @@ typedef struct {
 } tm;
 
 /* Get the current date UTC */
+// NOTE: Not always 100% accurate as RTC can be re-programmed to use localtime instead of gmtime
+// Which is especially deceiving if there's another OS running/has been run before
 void gmtime(tm* time);
 
 /* Get the current date of the local time */
-tm *localtime(void);
+// TODO: localtime. Will require Time protocol and syncing with either LAN or a public time server (Not yet available, networking stack first).
+// tm *localtime(void);
 
 #ifdef __cplusplus
 }
