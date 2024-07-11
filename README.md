@@ -78,64 +78,7 @@ Make sure you have the following tools installed:
 
 ## Contributing
 
-Contributions are welcome! Whether it's reporting bugs, suggesting new features, or submitting pull requests, your involvement is appreciated. In this project, i am following this [OSDev.wiki](https://osdev.wiki/wiki/Creating_an_Operating_System) roadmap.
-
-### Phase 0: Introduction
-
-- **[X] 1.1** Welcome to Operating Systems Development
-- **[X] 1.2** Building the latest GCC
-
-### Phase I: Beginning
-
-- **[X] 2.1** Setting up a Cross-Toolchain
-- **[X] 2.2** Creating a Hello World kernel
-- **[X] 2.3** Setting up a Project
-- **[X] 2.4** Calling Global Constructors
-- **[X] 2.5** Terminal Support
-- **[X] 2.6** Stack Smash Protector
-- **[X] 2.7** Multiboot
-- **[X] 2.8** Global Descriptor Table
-- **[ ] 2.9** Memory Management
-- **[ ] 2.10** Interrupts
-- **[ ] 2.11** Multithreaded Kernel
-- **[ ] 2.12** Keyboard
-- **[ ] 2.13** Internal Kernel Debugger
-- **[ ] 2.14** Filesystem Support
-
-### Phase II: User-Space
-
-- **[ ] 3.1** User-Space
-- **[ ] 3.2** Program Loading
-- **[ ] 3.3** System Calls
-- **[ ] 3.4** OS Specific Toolchain
-- **[ ] 3.5** Creating a C Library
-- **[ ] 3.6** Fork and Execute
-- **[ ] 3.7** Shell
-
-### Phase III: Extending your Operating System
-
-- **[ ] 4.1** Time
-- **[ ] 4.2** Threads
-- **[ ] 4.3** Thread Local Storage
-- **[ ] 4.4** Symmetric Multiprocessing
-- **[ ] 4.5** Secondary Storage
-- **[ ] 4.6** Real Filesystems
-- **[ ] 4.7** Graphics
-- **[ ] 4.8** User Interface
-- **[ ] 4.9** Networking
-- **[ ] 4.10** Sound
-- **[ ] 4.11** Universal Serial Bus
-
-### Phase IV: Bootstrapping
-
-- **[ ] 5.1** Porting Software
-- **[ ] 5.2** Porting GCC
-- **[ ] 5.3** Compiling your OS under your OS
-- **[ ] 5.4** Fully Self-hosting
-
-### Phase V: Profit
-
-- **[ ] 6.1** Completion
+Contributions are welcome! Whether it's reporting bugs, suggesting new features, or submitting pull requests, your involvement is appreciated. In this project, i am following this [Github Project Roadmap](https://github.com/users/iyksh/projects/3).
 
 ## License
 
