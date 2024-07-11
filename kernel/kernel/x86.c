@@ -35,10 +35,11 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
-
+#include <string.h>
+#include <kernel/tty.h>
 struct gdt_entry gdt[GDT_ARR_SIZE]; /* GDT Array    */
 struct gdt_ptr gp;                  /* GDT Pointer  */
-
+struct tss tss;                     /* Task state segment */
 /* Initialize a gdt segment descriptor.*/
 void init_gdt_desc(int num, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran) {
     gdt[num].base_low    = (base & 0xFFFF);
@@ -53,7 +54,7 @@ void init_gdt_desc(int num, uint32_t base, uint32_t limit, uint8_t access, uint8
 
 /* Load the GDT */
 static inline void gdt_load() {
-    gp.limit = (sizeof(struct gdt_entry) * 3) - 1;
+    gp.limit = (sizeof(struct gdt_entry) * GDT_ARR_SIZE) - 1;
     gp.base = (uint32_t)&gdt;
     asm volatile("lgdt (%0)" : : "r"(&gp));
     asm volatile("mov $0x10, %%ax; \
@@ -69,18 +70,17 @@ static inline void gdt_load() {
 /* Init the Global Descriptor Table (Kernel Only) */
 void init_GDT() {
     init_gdt_desc(0x00, 0x00, 0x00, 0x00, 0x00);        /* Null Descriptor  */
-    init_gdt_desc(0x01, 0x00, 0xFFFFFFFF, 0x9A, 0xCF);  /* Code Segment     */
-    init_gdt_desc(0x02, 0x00, 0xFFFFFFFF, 0x92, 0xCF);  /* Data Segment     */
+    init_gdt_desc(0x01, 0x00, 0xFFFFFFFF, 0x9A, 0xCF);  /* (Kernel) Code Segment     */
+    init_gdt_desc(0x02, 0x00, 0xFFFFFFFF, 0x92, 0xCF);  /* (Kernel) Data Segment     */
     gdt_load();
     
     /* Todo: USER, TASK Segments    */
 
 }
 
-bool vectors[IDT_MAX_DESCRIPTORS] = {false};
 
 /* IDT entries, aligned for performance*/
-__attribute__((aligned(0x10))) static idt_entry_t idt[0XFF]; 
+__attribute__((aligned(0x10))) static idt_entry_t idt[0xFF]; 
 
 void (*isr_stub_table[0XFF])() = { NULL };
 
@@ -97,7 +97,6 @@ void idt_set_descriptor(uint8_t vector, void (*isr)(), uint8_t flags) {
     idt[vector].reserved = 0;
     idt[vector].attributes = flags | 0x60;
     idt[vector].isr_high = ((uint32_t)isr >> 16) & 0xFFFF;
-
 }
 
 void isr_divide_by_zero() {
@@ -116,7 +115,9 @@ void isr_page_fault() {
 }
 
 /* Functions to push error and jump to ISR*/
-
+// TODO: Most of these should be implemented in assembly and should push only specific values onto the stack,
+// saving registers with pusha and popa and jumping to an exception handler (implemented in C) which will print the exception itself
+// and useful information like at which Addresses the exception occured
 void isr_stub_divide_by_zero() {
     asm volatile("push $0");
     asm volatile("jmp isr_divide_by_zero");
@@ -144,7 +145,6 @@ void init_IDT() {
     idt_set_descriptor(0x06, isr_invalid_opcode, 0x8E); /* function handler             */
     idt_set_descriptor(0x0E, isr_page_fault,     0x8E); /* 0x8E: 32-bit Interrupt Gate  */
     __asm__("lidt %0" : : "m"(idtr));
-
 }
 
 /* Remap the Programmable interrupt controller */
@@ -171,7 +171,6 @@ void remap_PIC() {
     outb(0xA1, 0xFF);
 
 }
-
 /* at kernel/keyboard.c         */
 extern void keyboard_handler(void); 
 
@@ -187,4 +186,26 @@ void init_IRQ() {
 
     __asm__("sti");
 
+}
+void tss_write(uint8_t id, uint16_t ss0, uint32_t esp0) {
+    memset(&tss, 0, sizeof(struct tss));
+    tss.ss0 = ss0;
+    tss.esp0 = esp0;
+    tss.cs = 0x0b;  // Kernel code segment
+    tss.ss = 0x13;  // Kernel data segment
+    tss.ds = 0x13;
+    tss.es = 0x13;
+    tss.fs = 0x13;
+    tss.gs = 0x13;
+
+    uint32_t base = (uint32_t)&tss;
+    uint32_t limit = base + sizeof(struct tss);
+    init_gdt_desc(id, base, limit, 0xE9, 0x00);
+}
+void tss_flush() {
+    asm volatile("ltr %%ax" : : "a"(0x28));
+}
+void init_TSS() {
+    tss_write(5, 0x10, 0x0);
+    tss_flush();
 }
