@@ -68,6 +68,9 @@ PUBLIC void kernel_main(void) {
 	init_IDT();
 	kernel_debug("IDT initialized", 0);
 
+    init_TSS();
+    kernel_debug("TSS initialized", 0);
+
 	init_IRQ();
 	kernel_debug("IRQ initialized", 0);
 	kernel_debug("Keyboard initialized", 0);
