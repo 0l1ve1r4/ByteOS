@@ -7,55 +7,14 @@
 
 ## Introduction
 
-**ByteOS** is a 32 bits operating system designed for educational purposes for those (me) interested in low-level systems programming. 
+**ByteOS** is a 32-bit operating system designed for educational purposes for those interested in low-level systems programming, 
+with the purpose of a well-documented wiki and bringing more "hands on" for those who want to learn the implementation of "everything" made from scratch.
 
-> **NOTE**
->
-> This project is still in very early stages. Test on real hardware at your own risk.
+#### [Click here to be redirected to the wiki](https://github.com/iyksh/ByteOS/wiki) 
 
-## Table of Contents
-
-- [Project Description](#project-description)
-- [Installation](#installation)
-- [Contributing](#contributing)
-- [License](#license)
-
-## Project Description
-
-### Overview
-
-This OS aims to provide a minimalistic and simple operating system that covers the basic functionalities expected from an OS. 
-
-### Built-in Libraries
-
-To maintain control and ensure that the system operates almost entirely from scratch, standard libraries are being rewritten. This approach helps in understanding the inner workings of these libraries and how they interact with the OS.
-
-#### Completed Libraries
-
-- **string.h**: String manipulation utilities.
-
-#### Partially Made Libraries
-
-- **stdio.h**: Basic input/output functions.
-- **stdlib.h**: Standard utility functions.
-- **time.h**: Time management functions.
+---
 
 ## Installation
-
-### Prerequisites
-
-#### Building a Cross-Compiler
-
-ByteOS uses an `i686-elf-gcc` cross-compiler. The versions used to build the project are:
-
-- binutils-2.40
-- gcc-12.2.0
-
-For detailed instructions on building and using a cross-compiler, refer to the [OSdev Wiki](https://osdev.wiki/wiki/GCC_Cross-Compiler).
-
-> **Note:** Ensure you configure your cross-binutils with the `--with-sysroot` option.
-
-#### Required Tools
 
 Make sure you have the following tools installed:
 
@@ -64,7 +23,15 @@ Make sure you have the following tools installed:
 - GCC (GNU Compiler Collection).
 - LD (GNU Linker).
 
-### Build Instructions
+For detailed instructions on building and using a cross-compiler, refer to the [OSdev Wiki](https://osdev.wiki/wiki/GCC_Cross-Compiler).
+
+> **NOTE**
+>
+> This project is still in very early stages. Test on real hardware at your own risk.
+> 
+> Ensure you configure your cross-binutils with the `--with-sysroot` option.
+
+---
 
 1. Clone the repository:
    ```bash
@@ -73,7 +40,7 @@ Make sure you have the following tools installed:
 
 2. Build and run the project:
    ```bash
-   ./run.sh       # This will automatically clean, build and run the project with QEMU
+   ./run.sh         # This will automatically clean, build and run the project with QEMU
    ```
 
 ## Contributing
