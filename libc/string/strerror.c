@@ -26,7 +26,7 @@ char *strerror(int errnum) {
         case EIO:
             return "Input/output error";
         default:
-            strcpy(buf, "Unknown error");
+            strncpy(buf, "Unknown error", 14);
             return buf;
     }
 }

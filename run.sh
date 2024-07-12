@@ -77,7 +77,7 @@ clean() {
   for PROJECT in $PROJECTS; do
     (cd "$PROJECT" && "$MAKE" clean)
   done
-  rm -rf sysroot isodir myos.iso $HOME/sysroot
+  rm -rf "sysroot isodir myos.iso $HOME/sysroot"
 }
 
 run() {

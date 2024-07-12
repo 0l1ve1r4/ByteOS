@@ -64,12 +64,11 @@ void shell_initialize(void) {
 
     while (1) {
         char buffer[256];
-        memset(buffer, '\0', 256);
         
         printf("\n");
         printf("root@%skernel%s:$/ ", "\033[92m", "\033[37m");
 
-        scanf("%d", &buffer);
+        scanf("%i", &buffer);
         shell(buffer);
     }
 } 

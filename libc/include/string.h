@@ -23,7 +23,8 @@ void *memcpy(void * restrict s1, const void * restrict s2, size_t n);
 void *memmove(void *s1, const void *s2, size_t n);
 
 /* Copy the string pointed by src to dest. */ 
-char *strcpy(char* restrict dest, const char* restrict src); 
+/* CRITICAL [MS-banned] (CWE-120). Consider using strncpy */
+/* char *strcpy(char* restrict dest, const char* restrict src);*/
 
 /* Copy at most n characters from the string pointed by s2 to s1. */ 
 char *strncpy(char * restrict s1, const char * restrict s2, size_t n);
