@@ -25,6 +25,6 @@ const char* get_date(void);
 /* Get the current time in UTC */
 const char* get_time(void);
 
-void rtc_initialize(void);
+uint8_t rtc_initialize(void);
 
 #endif /* RTC_H */

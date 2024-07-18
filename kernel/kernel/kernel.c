@@ -39,9 +39,11 @@ PRIVATE void kernel_debug(char* str, int status){
 
 }
 
+/* Initialize adding block to heap, (1MB mark and length of 1MB) 
+with default block size of 16 bytes */
 PRIVATE uint8_t heap_initialization(void){    
 	k_heap_init(&kheap);
-	k_add_block(&kheap, 0x01000, 0x100000, 16);
+	k_add_block(&kheap, 0x10000, 0x100000, 16);
 
 	char *ptr = (char*)k_malloc(&kheap, sizeof(char) * 10); 
 	for (uint8_t i = 0; i < 10; i++) {
@@ -59,24 +61,17 @@ PRIVATE uint8_t heap_initialization(void){
 
 
 PUBLIC void kernel_main(void) {
-  	init_tty();
-	kernel_debug("Terminal initialized", 0);
-
-	init_GDT();
-	kernel_debug("GDT initialized", 0);
+	kernel_debug("Terminal initialization", init_tty());
 	
-	init_IDT();
-	kernel_debug("IDT initialized", 0);
+	kernel_debug("GDT initialization", 	init_GDT());
+		
+	kernel_debug("IDT initialization", init_IDT());
 
-    init_TSS();
-    kernel_debug("TSS initialized", 0);
+    kernel_debug("TSS initialization", init_TSS());
 
-	init_IRQ();
-	kernel_debug("IRQ initialized", 0);
-	kernel_debug("Keyboard initialized", 0);
+	kernel_debug("IRQ initialization", init_IRQ());
 	
-	rtc_initialize();
-	kernel_debug("RTC initialized", 0);
+	kernel_debug("RTC initialization", rtc_initialize());
 
 	kernel_debug("Heap initialization", heap_initialization());
 

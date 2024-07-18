@@ -66,8 +66,12 @@ struct tss {
     uint32_t ssp;
 } __attribute__((packed));
 
-void init_GDT();
-void init_IDT();
-void init_IRQ();
-void init_TSS();
+uint8_t init_GDT();
+
+uint8_t init_IDT();
+
+uint8_t init_IRQ();
+
+uint8_t init_TSS();
+
 #endif /* _KERNEL_X86_H */

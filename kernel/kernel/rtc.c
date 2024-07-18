@@ -56,8 +56,10 @@ const char* get_time(void) {
             get_time_unit(0x00), ':');
 }
 
-void rtc_initialize(void){
+uint8_t rtc_initialize(void){
     rtc_startup_time = get_time();
     rtc_startup_date = get_date();
+
+    return 0;
 
 }

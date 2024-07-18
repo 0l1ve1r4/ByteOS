@@ -60,18 +60,30 @@ void verify_ansi_colors(const unsigned char* format) {
 static bool print(const char* data, size_t length) {
     const unsigned char* bytes = (const unsigned char*) data;
     for (size_t i = 0; i < length; i++) {
-        if (bytes[i] == '\033') {
+        switch (bytes[i]) {
+        case '\033':
             verify_ansi_colors(&bytes[i]);
             i += max_ansicolor_size;
-        }
+            break;
         
-        else if (bytes[i] == '\n') {            
+        case '\n':
             printl();
-        } else {
+            break;
+        
+        case '\t':
+            for (int j = 0; j < 4; j++) {
+                if (putchar(' ') == EOF)
+                    return false;
+            }
+            break;
+
+        default:
             if (putchar(bytes[i]) == EOF)
                 return false;
+            break;
         }
     }
+
     return true;
 }
 
@@ -102,7 +114,7 @@ int printf(const char * restrict format, ...) {
 
         const char* format_begun_at = format++;
 
-        if (*format == 'c') {
+         if (*format == 'c') {
             format++;
             char c = (char) va_arg(parameters, int /* char promotes to int */);
             if (!maxrem) {

@@ -127,7 +127,7 @@ void shell_help(char** args){
         printf("| %s", builtin_str[i]);
         
         if (!description) {
-            printf(" | %s", builtin_desc[i]);
+            printf("\t | %s", builtin_desc[i]);
         }
         printf("\n");
     }

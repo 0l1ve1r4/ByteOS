@@ -68,14 +68,14 @@ static inline void gdt_load() {
 }
 
 /* Init the Global Descriptor Table (Kernel Only) */
-void init_GDT() {
+uint8_t init_GDT() {
     init_gdt_desc(0x00, 0x00, 0x00, 0x00, 0x00);        /* Null Descriptor  */
     init_gdt_desc(0x01, 0x00, 0xFFFFFFFF, 0x9A, 0xCF);  /* (Kernel) Code Segment     */
     init_gdt_desc(0x02, 0x00, 0xFFFFFFFF, 0x92, 0xCF);  /* (Kernel) Data Segment     */
     gdt_load();
     
     /* Todo: USER, TASK Segments    */
-
+    return 0;
 }
 
 
@@ -137,7 +137,7 @@ void isr_stub_page_fault() {
 }
 
 /* Initialize the Interrupt Descriptor Table */
-void init_IDT() {
+uint8_t init_IDT() {
     idtr.limit = sizeof(idt) - 1;
     idtr.base = (uint32_t)&idt;
 
@@ -145,6 +145,9 @@ void init_IDT() {
     idt_set_descriptor(0x06, isr_invalid_opcode, 0x8E); /* function handler             */
     idt_set_descriptor(0x0E, isr_page_fault,     0x8E); /* 0x8E: 32-bit Interrupt Gate  */
     __asm__("lidt %0" : : "m"(idtr));
+
+    return 0;
+
 }
 
 /* Remap the Programmable interrupt controller */
@@ -175,7 +178,7 @@ void remap_PIC() {
 extern void keyboard_handler(void); 
 
 /* Init the Interrupt Request */
-void init_IRQ() {
+uint8_t init_IRQ() {
     remap_PIC();
     
     /* Map IRQ 1 (keyboard) to vector 33*/
@@ -186,7 +189,9 @@ void init_IRQ() {
 
     __asm__("sti");
 
+    return 0;
 }
+
 void tss_write(uint8_t id, uint16_t ss0, uint32_t esp0) {
     memset(&tss, 0, sizeof(struct tss));
     tss.ss0 = ss0;
@@ -205,7 +210,9 @@ void tss_write(uint8_t id, uint16_t ss0, uint32_t esp0) {
 void tss_flush() {
     asm volatile("ltr %%ax" : : "a"(0x28));
 }
-void init_TSS() {
+uint8_t init_TSS() {
     tss_write(5, 0x10, 0x0);
     tss_flush();
+
+    return 0;
 }
