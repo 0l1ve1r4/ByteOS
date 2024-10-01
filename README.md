@@ -1,14 +1,19 @@
+<div align="center">
+  <img src="res/logo.png" alt="ByteOSLogo" style="width: 70%;">
+
+<p align="center">
+    <strong>Open-source hobby operating system</strong>
+  </p>
+
+<hr>
+
 ![Commit activity](https://img.shields.io/github/commit-activity/m/iyksh/ByteOS)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/9c8eee0fc7554427aa7100e8e6662ee5)](https://app.codacy.com/gh/iyksh/ByteOS/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 ![GitHub top language](https://img.shields.io/github/languages/top/iyksh/ByteOS?logo=c&label=)
 [![GitHub license](https://img.shields.io/github/license/iyksh/ByteOS)](https://github.com/iyksh/ByteOS/LICENSE)
 
-# ByteOS
+</div>
 
-## Introduction
-
-**ByteOS** is a 32-bit operating system designed for educational purposes for those interested in low-level systems programming, 
-with the purpose of a well-documented wiki and bringing more "hands on" for those who want to learn the implementation of "everything" made from scratch.
+**ByteOS** is a 32-bit x86 architecture operating system designed for educational purposes for those interested in low-level systems programming.
 
 #### [Click here to be redirected to the wiki](https://github.com/iyksh/ByteOS/wiki) 
 
