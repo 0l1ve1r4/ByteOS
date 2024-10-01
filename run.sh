@@ -4,6 +4,7 @@
 
 # Remember to add your cross compiler on your ~/.bashrc or ~/.profile
 # export PATH="$HOME/opt/cross/bin:$PATH"
+
 DEFAULT_TARGET=i686-elf
 
 # ======================= Arguments =======================
