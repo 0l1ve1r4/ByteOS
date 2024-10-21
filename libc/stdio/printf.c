@@ -1,5 +1,4 @@
 #include <limits.h>
-#include <stdbool.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
@@ -36,7 +35,7 @@ const int max_ansicolor_size = 6;
 
 void verify_ansi_colors(const unsigned char* format) {
     char ansi_code[max_ansicolor_size];    
-    uint8_t ansi_index = 0;
+    u8 ansi_index = 0;
 
     // Copy the ANSI code into ansi_code array
     while (*format != 'm' && ansi_index < max_ansicolor_size - 1) {
@@ -93,7 +92,7 @@ int printf(const char * restrict format, ...) {
     int written = 0;
 
     while (*format != '\0') {
-        size_t maxrem = INT_MAX - written;
+        size_t maxrem = I32_MAX - written;
         
         if (format[0] != '%' || format[1] == '%') {
             if (format[0] == '%')

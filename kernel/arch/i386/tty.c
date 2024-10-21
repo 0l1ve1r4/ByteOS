@@ -1,40 +1,41 @@
 #include <kernel/tty.h>
 #include <utils/ports.h>
-#include <stddef.h>
+
+#include <types.h>
 
 #define VGA_WIDTH 80
 #define VGA_HEIGHT 25
-#define VGA_MEMORY (uint16_t*)0xB8000
+#define VGA_MEMORY (u16*)0xB8000
 
 static size_t terminal_row;
 static size_t terminal_column;
 static size_t last_wrote_index;
-static uint8_t terminal_color;
-static uint16_t* terminal_buffer;
+static u8 terminal_color;
+static u16* terminal_buffer;
 
 void terminal_roll(void);
 
-static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg) {
+static inline u8 vga_entry_color(enum vga_color fg, enum vga_color bg) {
     return fg | bg << 4;
 }
 
-static inline uint16_t vga_entry(unsigned char uc, uint8_t color) {
-    return (uint16_t)uc | (uint16_t)color << 8;
+static inline u16 vga_entry(unsigned char uc, u8 color) {
+    return (u16)uc | (u16)color << 8;
 }
 
-static void set_color(uint8_t fg, uint8_t bg) {
+static void set_color(u8 fg, u8 bg) {
     terminal_color = vga_entry_color(fg, bg);
 }
 
-void set_text_color(uint8_t color) {
+void set_text_color(u8 color) {
     set_color(color, VGA_COLOR_BLACK);
 }
 
-void set_bg_color(uint8_t color) {
+void set_bg_color(u8 color) {
     set_color(VGA_COLOR_LIGHT_GREY, color);
 }
 
-uint8_t init_tty(void) {
+u8 init_tty(void) {
     hide_vga_cursor();
     set_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
     terminal_buffer = VGA_MEMORY;
@@ -43,11 +44,11 @@ uint8_t init_tty(void) {
     return 0;
 }
 
-void terminal_setcolor(uint8_t color) {
+void terminal_setcolor(u8 color) {
     terminal_color = color;
 }
 
-void terminal_putentryat(unsigned char c, uint8_t color, size_t x, size_t y) {
+void terminal_putentryat(unsigned char c, u8 color, size_t x, size_t y) {
     const size_t index = y * VGA_WIDTH + x;
     terminal_buffer[index] = vga_entry(c, color);
     last_wrote_index = index;
@@ -127,10 +128,10 @@ void show_vga_cursor(void) {
     outb(0x3D5, (inb(0x3D5) & 0xE0) | 1);
 }
 
-void update_vga_cursor(uint16_t pos) {
+void update_vga_cursor(u16 pos) {
     pos++;
     outb(0x3D4, 0x0F);
-    outb(0x3D5, (uint8_t)(pos & 0xFF));
+    outb(0x3D5, (u8)(pos & 0xFF));
     outb(0x3D4, 0x0E);
-    outb(0x3D5, (uint8_t)((pos >> 8) & 0xFF));
+    outb(0x3D5, (u8)((pos >> 8) & 0xFF));
 }

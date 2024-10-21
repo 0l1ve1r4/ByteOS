@@ -1,5 +1,5 @@
 #include <string.h>
-#include <stdbool.h>
+#include <types.h>
 
 /* Count the number of tokens in a string */
 size_t count_tokens(const char* str, char delim) {

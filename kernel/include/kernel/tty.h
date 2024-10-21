@@ -1,8 +1,8 @@
 #ifndef _KERNEL_TTY_H
 #define _KERNEL_TTY_H
 
-#include <stddef.h>
-#include <stdint.h>
+#include <types.h>
+
 
 enum vga_color {
 	VGA_COLOR_BLACK = 0x00,
@@ -24,13 +24,13 @@ enum vga_color {
 };
 
 /* Set the text color based on the 0x0F VGA color scheme */
-void set_text_color(uint8_t color);
+void set_text_color(u8 color);
 
 /* Set the background color based on the 0x0F VGA color scheme */
-void set_bg_color(uint8_t color);
+void set_bg_color(u8 color);
 
 /* Initialize the terminal */
-uint8_t init_tty(void);
+u8 init_tty(void);
 
 /* Insert a char in the current VGA buffer */
 void terminal_putchar(char c);
@@ -54,6 +54,6 @@ void hide_vga_cursor(void);
 void show_vga_cursor(void);
 
 /* Update the VGA cursor */
-void update_vga_cursor(uint16_t pos);
+void update_vga_cursor(u16 pos);
 
 #endif

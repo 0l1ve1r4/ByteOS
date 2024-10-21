@@ -5,7 +5,7 @@
 #ifndef RTC_H
 #define RTC_H
 
-#include <stdint.h>
+#include <types.h>
 
 struct rtc_time {
 	int tm_sec;
@@ -25,6 +25,6 @@ const char* get_date(void);
 /* Get the current time in UTC */
 const char* get_time(void);
 
-uint8_t rtc_initialize(void);
+u8 rtc_initialize(void);
 
 #endif /* RTC_H */

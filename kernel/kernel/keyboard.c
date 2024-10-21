@@ -7,9 +7,8 @@
 #include <utils/ports.h>
 #include <kernel/tty.h>
 
-#include <stdint.h>            
-#include <stdbool.h>
-#include <stddef.h>             
+#include <types.h>       
+#include <limits.h>     
 
 
 /* https://osdev.wiki/wiki/PS/2_Keyboard#Scan_Code_Sets */
@@ -25,7 +24,7 @@
 /* Internal Functions */
 void read_input(char *buffer, size_t max_length);
 void write_eoi(void);
-uint8_t read_keyboard_status(void);
+u8 read_keyboard_status(void);
 char read_keycode(void);
 void handle_keycode(char keycode);
 void handle_enter_key(void);
@@ -62,8 +61,8 @@ bool lshift = false;
 bool capslock = false;
 bool in_scanf = false;
 
-char input_buffer[UINT8_MAX];
-uint32_t input_buffer_index = 0;
+char input_buffer[U8_MAX];
+u32 input_buffer_index = 0;
 
 void keyboard_initialize(void) {
     write_port(0x21 , 0xFD);
@@ -71,7 +70,7 @@ void keyboard_initialize(void) {
 
 void keyboard_handler(void) {
     write_eoi();
-    uint8_t status = read_keyboard_status();
+    u8 status = read_keyboard_status();
     if (status & 0x01) {
         char keycode = read_keycode();
         if (keycode < 0) {
@@ -85,7 +84,7 @@ void write_eoi(void) {
     write_port(0x20, 0x20);
 }
 
-uint8_t read_keyboard_status(void) {
+u8 read_keyboard_status(void) {
     return read_port(KEYBOARD_STATUS_PORT);
 }
 
@@ -148,11 +147,11 @@ void handle_lshift_key(void){
 }
 
 void handle_default_key(char keycode) {
-    uint8_t c;
+    u8 c;
     if (lshift){
-        c = characterTableShift[(uint8_t)keycode];
+        c = characterTableShift[(u8)keycode];
     } else {
-        c = characterTable[(uint8_t)keycode];
+        c = characterTable[(u8)keycode];
     }
 
     if (capslock) {
@@ -186,7 +185,7 @@ void keyboard_scanf(char *buffer) {
 
     // Wait for Enter key press
     while (in_scanf) {
-        uint8_t status = read_keyboard_status();
+        u8 status = read_keyboard_status();
         if (status & 0x01) {
             char keycode = read_keycode();
             if (keycode < 0) {

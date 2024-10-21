@@ -17,8 +17,11 @@ typedef signed   int        i32;
 typedef float               f32;
 typedef double              f64;
 
-typedef u8                  bool;
+typedef unsigned char       bool;
+typedef unsigned long       size_t;
+typedef unsigned long       uintptr_t;
 
-typedef u32                 size_t;
+#define false               0
+#define true                1
 
 #endif /* TYPES_H */

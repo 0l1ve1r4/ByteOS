@@ -1,7 +1,7 @@
 #include <stdlib.h>
+#include <types.h>
 
 #include <stdarg.h>
-#include <stddef.h>
 
 /* Internal helper functions */
 int snprintf_string(char *s, size_t n, const char *str, int precision);

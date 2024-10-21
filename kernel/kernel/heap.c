@@ -5,10 +5,10 @@ void k_heapBMInit(KHEAPBM *heap) {
     heap->fblock = 0;
 }
 
-int k_heapBMAddBlock(KHEAPBM *heap, uintptr_t addr, uint32_t size, uint32_t bsize) {
+int k_heapBMAddBlock(KHEAPBM *heap, uintptr_t addr, u32 size, u32 bsize) {
     KHEAPBLOCKBM *block = (KHEAPBLOCKBM *)addr;
-    uint32_t blockCount, x;
-    uint8_t *bitmap;
+    u32 blockCount, x;
+    u8 *bitmap;
 
     if (size < sizeof(KHEAPBLOCKBM)) {
         printf("Error: Block size too small\n");
@@ -21,7 +21,7 @@ int k_heapBMAddBlock(KHEAPBM *heap, uintptr_t addr, uint32_t size, uint32_t bsiz
     heap->fblock = block;
 
     blockCount = block->size / block->bsize;
-    bitmap = (uint8_t *)&block[1];
+    bitmap = (u8 *)&block[1];
 
     // Clear bitmap
     for (x = 0; x < blockCount; ++x) {
@@ -40,24 +40,24 @@ int k_heapBMAddBlock(KHEAPBM *heap, uintptr_t addr, uint32_t size, uint32_t bsiz
     return 1;
 }
 
-static uint8_t k_heapBMGetNID(uint8_t a, uint8_t b) {
-    uint8_t c;
+static u8 k_heapBMGetNID(u8 a, u8 b) {
+    u8 c;
     for (c = a + 1; c == b || c == 0; ++c);
     return c;
 }
 
-void *k_heapBMAlloc(KHEAPBM *heap, uint32_t size) {
+void *k_heapBMAlloc(KHEAPBM *heap, u32 size) {
     KHEAPBLOCKBM *block;
-    uint8_t *bitmap;
-    uint32_t blockCount, x, y, z, neededBlocks;
-    uint8_t nid;
+    u8 *bitmap;
+    u32 blockCount, x, y, z, neededBlocks;
+    u8 nid;
 
     // Iterate blocks
     for (block = heap->fblock; block; block = block->next) {
         if (block->size - (block->used * block->bsize) >= size) {
             blockCount = block->size / block->bsize;
             neededBlocks = (size / block->bsize) * block->bsize < size ? size / block->bsize + 1 : size / block->bsize;
-            bitmap = (uint8_t *)&block[1];
+            bitmap = (u8 *)&block[1];
 
             for (x = (block->lfb + 1 >= blockCount ? 0 : block->lfb + 1); x < block->lfb; ++x) {
                 if (x >= blockCount) {
@@ -96,16 +96,16 @@ void *k_heapBMAlloc(KHEAPBM *heap, uint32_t size) {
 void k_heapBMFree(KHEAPBM *heap, void *ptr) {
     KHEAPBLOCKBM *block;
     uintptr_t ptrOffset;
-    uint32_t blockIndex, x;
-    uint8_t *bitmap;
-    uint8_t id;
-    uint32_t maxBlocks;
+    u32 blockIndex, x;
+    u8 *bitmap;
+    u8 id;
+    u32 maxBlocks;
 
     for (block = heap->fblock; block; block = block->next) {
         if ((uintptr_t)ptr > (uintptr_t)block && (uintptr_t)ptr < (uintptr_t)block + sizeof(KHEAPBLOCKBM) + block->size) {
             ptrOffset = (uintptr_t)ptr - (uintptr_t)&block[1];
             blockIndex = ptrOffset / block->bsize;
-            bitmap = (uint8_t *)&block[1];
+            bitmap = (u8 *)&block[1];
             id = bitmap[blockIndex];
             maxBlocks = block->size / block->bsize;
 

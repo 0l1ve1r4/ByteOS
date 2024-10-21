@@ -1,12 +1,14 @@
 #include <string.h>
-#include <stdint.h>
+#include <types.h>
+#include <limits.h>     
+
 
 char** split_str(const char* str, char delim) {
-    static char tokens[UINT8_MAX][UINT8_MAX];       // Static array for tokens
-    static char* result[UINT8_MAX + 1];              // Static array for pointers to tokens
+    static char tokens[U8_MAX][U8_MAX];       // Static array for tokens
+    static char* result[U8_MAX + 1];              // Static array for pointers to tokens
     size_t token_index = 0;
 
-    while (*str && token_index < UINT8_MAX) {
+    while (*str && token_index < U8_MAX) {
         while (*str == delim) { // Skip delimiters
             str++;
         }
@@ -14,7 +16,7 @@ char** split_str(const char* str, char delim) {
         const char* token_start = str; // Find the end of the token
         size_t token_length = 0;
 
-        while (*str && *str != delim && token_length < UINT8_MAX - 1) {
+        while (*str && *str != delim && token_length < U8_MAX - 1) {
             str++;
             token_length++;
         }

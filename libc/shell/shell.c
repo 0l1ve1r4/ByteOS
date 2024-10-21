@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <types.h>
 
 /* Return the number of builtins shell commands */
 size_t num_builtins(void);
@@ -119,11 +120,11 @@ void shell_clear(char** args) {
 }
 
 void shell_help(char** args){
-    uint8_t description = strcmp(args[0], "-d");
+    u8 description = strcmp(args[0], "-d");
     description == 0 ? printf("Available commands:\n") : printf("Available commands (use -d to show more):\n");    
     printf("\n");
         
-    for (uint8_t i = 0; i < num_builtins(); i++) {
+    for (u8 i = 0; i < num_builtins(); i++) {
         printf("| %s", builtin_str[i]);
         
         if (!description) {

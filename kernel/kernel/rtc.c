@@ -11,14 +11,14 @@ enum CMOS_Registers {
     CMOS_DATA = 0x71
 };
 
-static uint8_t get_RTC_register(int reg) {
+static u8 get_RTC_register(int reg) {
     outb(CMOS_ADDRESS, reg);
     return inb(CMOS_DATA);
 }
 
-static uint8_t get_time_unit(int reg) {
-    uint8_t unit = get_RTC_register(reg);
-    uint8_t registerB = get_RTC_register(0x0B);
+static u8 get_time_unit(int reg) {
+    u8 unit = get_RTC_register(reg);
+    u8 registerB = get_RTC_register(0x0B);
     if (!(registerB & 0x04)) {
         if (reg == 0x04) {
             unit = ((unit & 0x0F) + (((unit & 0x70) / 16) * 10)) | (unit & 0x80);
@@ -29,9 +29,9 @@ static uint8_t get_time_unit(int reg) {
     return unit;
 }
 
-static char* unit_converter(uint8_t s1, uint8_t s2, uint8_t s3, char delimiter) {
+static char* unit_converter(u8 s1, u8 s2, u8 s3, char delimiter) {
     static char to_return[9];
-    uint8_t units[] = {s1, s2, s3};
+    u8 units[] = {s1, s2, s3};
 
     for (int i = 0, j = 0; i < 3; ++i) {
         to_return[j++] = '0' + units[i] / 10;
@@ -56,7 +56,7 @@ const char* get_time(void) {
             get_time_unit(0x00), ':');
 }
 
-uint8_t rtc_initialize(void){
+u8 rtc_initialize(void){
     rtc_startup_time = get_time();
     rtc_startup_date = get_date();
 

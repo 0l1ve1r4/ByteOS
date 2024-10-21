@@ -1,14 +1,14 @@
 #ifndef _KERNEL_HEAP_H
 #define _KERNEL_HEAP_H
 
-#include <stdint.h>
+#include <types.h>
 
 typedef struct _KHEAPBLOCKBM {
     struct _KHEAPBLOCKBM *next;
-    uint32_t size;
-    uint32_t used;
-    uint32_t bsize;
-    uint32_t lfb; // Last free block index
+    u32 size;
+    u32 used;
+    u32 bsize;
+    u32 lfb; // Last free block index
 } KHEAPBLOCKBM;
 
 /* First block in heap */
@@ -20,10 +20,10 @@ typedef struct _KHEAPBM {
 void k_heapBMInit(KHEAPBM *heap);
 
 /* Add a block to the heap block manager	*/
-int k_heapBMAddBlock(KHEAPBM *heap, uintptr_t addr, uint32_t size, uint32_t bsize);
+int k_heapBMAddBlock(KHEAPBM *heap, uintptr_t addr, u32 size, u32 bsize);
 
 /* Allocate memory from the heap block manager	*/
-void *k_heapBMAlloc(KHEAPBM *heap, uint32_t size);
+void *k_heapBMAlloc(KHEAPBM *heap, u32 size);
 
 /* Free allocated memory in the heap block manager	*/
 void k_heapBMFree(KHEAPBM *heap, void *ptr);

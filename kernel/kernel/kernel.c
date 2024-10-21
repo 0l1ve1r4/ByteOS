@@ -41,12 +41,12 @@ PRIVATE void kernel_debug(char* str, int status){
 
 /* Initialize adding block to heap, (1MB mark and length of 1MB) 
 with default block size of 16 bytes */
-PRIVATE uint8_t heap_initialization(void){    
+PRIVATE u8 heap_initialization(void){    
 	k_heap_init(&kheap);
 	k_add_block(&kheap, 0x10000, 0x100000, 16);
 
 	char *ptr = (char*)k_malloc(&kheap, sizeof(char) * 10); 
-	for (uint8_t i = 0; i < 10; i++) {
+	for (u8 i = 0; i < 10; i++) {
 		ptr[i] = i + '0';
 	}     
 

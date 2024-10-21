@@ -6,17 +6,17 @@
 #ifndef PORTS_H
 #define PORTS_H
 
-#include <stdint.h>
+#include <types.h>
 
 // Read from port function
-static inline uint8_t read_port(uint16_t port) {
-    uint8_t value;
+static inline u8 read_port(u16 port) {
+    u8 value;
     __asm__ __volatile__ ("inb %w1, %b0" : "=a" (value) : "Nd" (port));
     return value;
 }
 
 // Write to port function
-static inline void write_port(uint16_t port, uint8_t value) {
+static inline void write_port(u16 port, u8 value) {
     __asm__ __volatile__ ("outb %b0, %w1" : : "a" (value), "Nd" (port));
 }
 
@@ -27,27 +27,27 @@ static inline void load_idt(void *idt_ptr) {
 }
 
 // Sends a byte to an I/O port  
-static inline void outb(uint16_t port, uint8_t value) {
+static inline void outb(u16 port, u8 value) {
     __asm__ volatile ("outb %1, %0" : : "dN" (port), "a" (value));
 
 }
 
 // Reads a byte from an I/O port and returns it
-static inline uint8_t inb(uint16_t port) {
-    uint8_t ret;
+static inline u8 inb(u16 port) {
+    u8 ret;
     __asm__ volatile ("inb %1, %0" : "=a" (ret) : "dN" (port));
     return ret;
 }
 
 // Reads 2 bytes value from an I/O port and returns it
-static inline uint16_t inw(uint16_t port) {
-    uint16_t ret;
+static inline u16 inw(u16 port) {
+    u16 ret;
     __asm__ volatile ("inw %1, %0" : "=a" (ret) : "dN" (port));
     return ret;
 }
 
 // Sends a 2 bytes value to an I/O port
-static inline void outw(uint16_t port, uint16_t value) {
+static inline void outw(u16 port, u16 value) {
     __asm__ volatile ("outw %1, %0" : : "dN" (port), "a" (value));
 }
 

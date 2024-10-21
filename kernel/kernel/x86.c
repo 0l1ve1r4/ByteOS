@@ -32,16 +32,15 @@
 
 #include <kernel/x86.h>
 #include <utils/ports.h>
-#include <stdbool.h>
-#include <stddef.h>
 #include <stdio.h>
 #include <string.h>
 #include <kernel/tty.h>
+
 struct gdt_entry gdt[GDT_ARR_SIZE]; /* GDT Array    */
 struct gdt_ptr gp;                  /* GDT Pointer  */
 struct tss tss;                     /* Task state segment */
 /* Initialize a gdt segment descriptor.*/
-void init_gdt_desc(int num, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran) {
+void init_gdt_desc(int num, u32 base, u32 limit, u8 access, u8 gran) {
     gdt[num].base_low    = (base & 0xFFFF);
     gdt[num].base_middle = (base >> 16) & 0xFF;
     gdt[num].base_high   = (base >> 24) & 0xFF;
@@ -55,7 +54,7 @@ void init_gdt_desc(int num, uint32_t base, uint32_t limit, uint8_t access, uint8
 /* Load the GDT */
 static inline void gdt_load() {
     gp.limit = (sizeof(struct gdt_entry) * GDT_ARR_SIZE) - 1;
-    gp.base = (uint32_t)&gdt;
+    gp.base = (u32)&gdt;
     asm volatile("lgdt (%0)" : : "r"(&gp));
     asm volatile("mov $0x10, %%ax; \
                   mov %%ax, %%ds; \
@@ -68,7 +67,7 @@ static inline void gdt_load() {
 }
 
 /* Init the Global Descriptor Table (Kernel Only) */
-uint8_t init_GDT() {
+u8 init_GDT() {
     init_gdt_desc(0x00, 0x00, 0x00, 0x00, 0x00);        /* Null Descriptor  */
     init_gdt_desc(0x01, 0x00, 0xFFFFFFFF, 0x9A, 0xCF);  /* (Kernel) Code Segment     */
     init_gdt_desc(0x02, 0x00, 0xFFFFFFFF, 0x92, 0xCF);  /* (Kernel) Data Segment     */
@@ -90,13 +89,13 @@ static void isr_debug(char* str){
     printf("%s [Exception]: %s %s", "\033[91m", "\033[37m", str);
 }
 
-void idt_set_descriptor(uint8_t vector, void (*isr)(), uint8_t flags) {
+void idt_set_descriptor(u8 vector, void (*isr)(), u8 flags) {
     isr_stub_table[vector] = isr;
-    idt[vector].isr_low = (uint32_t)isr & 0xFFFF;
+    idt[vector].isr_low = (u32)isr & 0xFFFF;
     idt[vector].kernel_cs = 0x08;
     idt[vector].reserved = 0;
     idt[vector].attributes = flags | 0x60;
-    idt[vector].isr_high = ((uint32_t)isr >> 16) & 0xFFFF;
+    idt[vector].isr_high = ((u32)isr >> 16) & 0xFFFF;
 }
 
 void isr_divide_by_zero() {
@@ -137,9 +136,9 @@ void isr_stub_page_fault() {
 }
 
 /* Initialize the Interrupt Descriptor Table */
-uint8_t init_IDT() {
+u8 init_IDT() {
     idtr.limit = sizeof(idt) - 1;
-    idtr.base = (uint32_t)&idt;
+    idtr.base = (u32)&idt;
 
     idt_set_descriptor(0x00, isr_divide_by_zero, 0x8E); /* 0X00 isr array position      */
     idt_set_descriptor(0x06, isr_invalid_opcode, 0x8E); /* function handler             */
@@ -178,7 +177,7 @@ void remap_PIC() {
 extern void keyboard_handler(void); 
 
 /* Init the Interrupt Request */
-uint8_t init_IRQ() {
+u8 init_IRQ() {
     remap_PIC();
     
     /* Map IRQ 1 (keyboard) to vector 33*/
@@ -192,7 +191,7 @@ uint8_t init_IRQ() {
     return 0;
 }
 
-void tss_write(uint8_t id, uint16_t ss0, uint32_t esp0) {
+void tss_write(u8 id, u16 ss0, u32 esp0) {
     memset(&tss, 0, sizeof(struct tss));
     tss.ss0 = ss0;
     tss.esp0 = esp0;
@@ -203,14 +202,14 @@ void tss_write(uint8_t id, uint16_t ss0, uint32_t esp0) {
     tss.fs = 0x13;
     tss.gs = 0x13;
 
-    uint32_t base = (uint32_t)&tss;
-    uint32_t limit = base + sizeof(struct tss);
+    u32 base = (u32)&tss;
+    u32 limit = base + sizeof(struct tss);
     init_gdt_desc(id, base, limit, 0xE9, 0x00);
 }
 void tss_flush() {
     asm volatile("ltr %%ax" : : "a"(0x28));
 }
-uint8_t init_TSS() {
+u8 init_TSS() {
     tss_write(5, 0x10, 0x0);
     tss_flush();
 
