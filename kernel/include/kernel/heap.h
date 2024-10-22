@@ -3,11 +3,13 @@
 
 #include <types.h>
 
-void kernelHeapInit(void);
+#define ALLOCATION_REPRESENTATION 'A'
 
-void * kMalloc(u32 size);
+void initHeap(void);
 
-void kFree(void * pointer);
+void *kMalloc(size_t size);
+
+void kFree(void *ptr);
 
 #endif /* _KERNEL_HEAP_H */
 

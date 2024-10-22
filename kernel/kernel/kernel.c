@@ -1,3 +1,13 @@
+/* This file is part of ByteOS.
+    Copyright (C) 2024 Guilherme Oliveira Santos
+    This is free software: you can redistribute it and/or modify it 
+    under the terms of the GNU GPL3 or (at your option) any later version. 
+	
+	* File: kernel.c 
+	* Description: Kernel entry point
+	* Sources: 
+*/
+
 #include <kernel/tty.h>
 #include <kernel/x86.h>
 #include <drivers/keyboard.h>
@@ -40,18 +50,16 @@ PRIVATE void kernel_debug(char* str, int status){
 /* Initialize adding block to heap, (1MB mark and length of 1MB) 
 with default block size of 16 bytes */
 PRIVATE u8 heap_initialization(void){  
-	kernelHeapInit();  	
-	char *ptr = (char*)kMalloc(sizeof(char) * 5); 
-	for (u8 i = 0; i < 10; i++) {
-		ptr[i] = i + '0';
+	initHeap();
+	char *ptr = (char*)kMalloc(32); 
+	for (u8 i = 0; i < 33; i++) {
+		if (i < 32 && ptr[i] != ALLOCATION_REPRESENTATION) {
+			printf("SOMETHING WENT WRONG WITH MALLOC");
+			return INIT_FAILURE;
+		}
 	}     
 
-	if (strcmp(ptr, "0123456789") == 0){
-		kFree(ptr);
-		return INIT_SUCESS;
-	}
-	
-	return INIT_FAILURE;
+	return INIT_SUCESS;
 
 }
 

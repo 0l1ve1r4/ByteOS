@@ -1,7 +1,12 @@
 /* This file is part of ByteOS.
     Copyright (C) 2024 Guilherme Oliveira Santos
     This is free software: you can redistribute it and/or modify it 
-    under the terms of the GNU GPL3 or (at your option) any later version. */
+    under the terms of the GNU GPL3 or (at your option) any later version. 
+	
+	* File: keyboard.c 
+	* Description: PS/2 Keyboard driver 
+	* Sources: https://osdev.wiki/wiki/PS/2_Keyboard#Scan_Code_Sets 
+*/
 
 #include <drivers/keyboard.h>   
 #include <utils/ports.h>
@@ -10,16 +15,12 @@
 #include <types.h>       
 #include <limits.h>     
 
-
-/* https://osdev.wiki/wiki/PS/2_Keyboard#Scan_Code_Sets */
 #define KEYBOARD_DATA_PORT      0x60
 #define KEYBOARD_STATUS_PORT    0x64
 #define CAPSLOCK_KEY_CODE       0x3A
 #define ENTER_KEY_CODE          0x1C
 #define BACKSPACE_KEY_CODE      0x0E
 #define LSHIFT_KEY_CODE         0x2A
-
-#define MAX_BUFFER_SIZE         255
 
 /* Internal Functions */
 void read_input(char *buffer, size_t max_length);
@@ -195,5 +196,5 @@ void keyboard_scanf(char *buffer) {
         }
     }  
     // Copy the input buffer to the provided buffer
-    read_input(buffer, MAX_BUFFER_SIZE);
+    read_input(buffer, U8_MAX);
 }

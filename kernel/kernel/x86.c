@@ -1,10 +1,16 @@
-/* What is this stuff?
+/* This file is part of ByteOS.
+    Copyright (C) 2024 Guilherme Oliveira Santos
+    This is free software: you can redistribute it and/or modify it 
+    under the terms of the GNU GPL3 or (at your option) any later version. 
+	
+	* File: x86.c 
+	* Description: Space for the interrupt descriptor table and Tell the CPU where that space is 
+                    Tell the PIC that you no longer want to use the BIOS defaults 
+                    ISR handlers (Interrupt Service Routines) for both IRQs and exceptions
+                    Addresses of the ISR handlers in the appropriate descriptors (in Interrupt Descriptor Table)
+                    Enable all supported interrupts in the IRQ mask (of the PIC)
 
-    Space for the interrupt descriptor table and Tell the CPU where that space is 
-    Tell the PIC that you no longer want to use the BIOS defaults 
-    ISR handlers (Interrupt Service Routines) for both IRQs and exceptions
-    Addresses of the ISR handlers in the appropriate descriptors (in Interrupt Descriptor Table)
-    Enable all supported interrupts in the IRQ mask (of the PIC)
+    * Sources:
 
    Global Descriptor Table (GDT)
    
