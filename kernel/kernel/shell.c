@@ -7,10 +7,10 @@
 	* Description: kernel builtin shell
 */
 
-#include "shell.h"
 
-#include <fs/ramfs.h>
 #include <limits.h>
+#include <fs/ramfs.h>
+#include <kernel/shell.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -47,7 +47,7 @@ char* builtin_str[] = {
     "date",
     "ls",
     "touch",
-    "cat"
+    "cat",
 };
 
 char* builtin_desc[] = {
@@ -59,8 +59,8 @@ char* builtin_desc[] = {
     "Change the color of the shell",
     "Show the current date",
     "List files",
-    "Create a new file"
-    "Show file content"
+    "Create a new file",
+    "Show file content",
 };
 
 void (*builtin_func[]) (char**) = {

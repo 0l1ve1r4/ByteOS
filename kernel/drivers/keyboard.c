@@ -180,7 +180,7 @@ void read_input(char *buffer, size_t max_length) {
 }
 
 
-// Waits for the user to press Enter and stores the input in the provided buffer
+// Waits the user to press Enter and stores the input in the buffer
 void keyboard_scanf(char *buffer) {
     in_scanf = true;
 

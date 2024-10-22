@@ -13,7 +13,7 @@
 #include <drivers/keyboard.h>
 #include <drivers/rtc.h>
 #include <kernel/heap.h>
-
+#include <fs/ramfs.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,7 +41,7 @@ PRIVATE void kernel_debug(char* str, int status){
 		break;
 
 	default:
-		printf("%s[ ? ]%s Unknown Status: [%i]\n", "\033[31m", "\033[37m", status);
+		printf("%s[ ? ]%s Unknown", "\033[31m", "\033[37m");
 		break;
 	}
 

@@ -89,15 +89,15 @@ void ramfs_ls() {
     }
 
     printf("Total: %i\n", ramfs.root.file_count);
-    printf("FILE NAME \t FILE CREATOR \t SIZE (BYTES) \t CREATION TIME\n");
-    for (int i = 0; i < ramfs.root.file_count; i++) {
+    printf("FILE \t CREATOR \t SIZE (B) \t CREATION \n");
+    for (u32 i = 0; i < ramfs.root.file_count; i++) {
         printf("%s \t root \t %i \t NULL\n", 
             ramfs.root.files[i]->name, ramfs.root.files[i]->size);
     }
 }
 
 void ramfs_cat(const char* name) {
-    for (int i = 0; i < ramfs.root.file_count; i++) {
+    for (u32 i = 0; i < ramfs.root.file_count; i++) {
         File* file = ramfs.root.files[i];
         if (strcmp(file->name, name) == 0) {
             printf("%s\n", file->data);
@@ -108,7 +108,7 @@ void ramfs_cat(const char* name) {
 }
 
 File* ramfs_find_file(const char* name) {
-    for (int i = 0; i < ramfs.root.file_count; i++) {
+    for (u32 i = 0; i < ramfs.root.file_count; i++) {
         if (strcmp(ramfs.root.files[i]->name, name) == 0) {
             return ramfs.root.files[i];
         }
