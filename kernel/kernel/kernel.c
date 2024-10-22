@@ -79,6 +79,10 @@ PUBLIC void kernel_main(void) {
 
 	kernel_debug("Heap initialization", heap_initialization());
 
+	kernel_debug("RAM Filesystem", ramfs_init());
+
+
     shell_initialize();
+
 
 }

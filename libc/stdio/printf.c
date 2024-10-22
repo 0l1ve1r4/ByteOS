@@ -86,6 +86,55 @@ static bool print(const char* data, size_t length) {
     return true;
 }
 
+void reverse(char str[], int length) {
+    int start = 0;
+    int end = length - 1;
+    while (start < end) {
+        // Swap the characters
+        char temp = str[start];
+        str[start] = str[end];
+        str[end] = temp;
+        start++;
+        end--;
+    }
+}
+
+char* itoa(int num, char* buffer, int base) {
+    int i = 0;
+    int isNegative = 0;
+
+    // Handle 0 explicitly, as it won't be handled in the loop
+    if (num == 0) {
+        buffer[i++] = '0';
+        buffer[i] = '\0';
+        return buffer;
+    }
+
+    // Handle negative numbers for base 10
+    if (num < 0 && base == 10) {
+        isNegative = 1;
+        num = -num;
+    }
+
+    // Process individual digits
+    while (num != 0) {
+        int rem = num % base;
+        buffer[i++] = (rem > 9) ? (rem - 10) + 'a' : rem + '0';  // Handles hexadecimal numbers
+        num = num / base;
+    }
+
+    // If the number is negative in base 10, append '-'
+    if (isNegative)
+        buffer[i++] = '-';
+
+    buffer[i] = '\0';  // Append string terminator
+
+    // Reverse the string since digits were added in reverse order
+    reverse(buffer, i);
+
+    return buffer;
+}
+
 int printf(const char * restrict format, ...) {
     va_list parameters;
     va_start(parameters, format);
@@ -135,19 +184,18 @@ int printf(const char * restrict format, ...) {
                 return -1;
             written += len;
         } else if (*format == 'i' || *format == 'd') {
-            format++;
-            int i = va_arg(parameters, int);
-            char buffer[20];
-            snprintf(buffer, sizeof(buffer), "%d", i);
-            size_t len = strlen(buffer);
-            if (maxrem < len) {
-                // TODO: Set errno to EOVERFLOW.
-                return -1;
-            }
-            if (!print(buffer, len))
-                return -1;
-            written += len;  
-        } else if (*format == 'f') {
+    format++;
+    int i = va_arg(parameters, int);
+
+    // Allocate a buffer large enough to hold the string representation of the integer
+    char buffer[12]; // 12 bytes are enough to store an int in string format
+    itoa(i, buffer, 10);  // Convert integer to string (base 10)
+    
+    size_t len = strlen(buffer); 
+    if (!print(buffer, len)) 
+        return -1; 
+    written += len; 
+}        else if (*format == 'f') {
             format++;
             double f = va_arg(parameters, double);
             char buffer[64];

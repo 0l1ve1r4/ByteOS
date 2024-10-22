@@ -3,7 +3,7 @@
 
 #include <types.h>
 
-#define ALLOCATION_REPRESENTATION 'A'
+#define ALLOCATION_REPRESENTATION '\0'
 
 void initHeap(void);
 

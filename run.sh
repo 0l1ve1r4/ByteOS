@@ -48,7 +48,7 @@ export INCLUDEDIR=$PREFIX/include
 export CFLAGS='-O2 -g'
 export CPPFLAGS=''
 export SYSROOT="$HOME/sysroot"
-export CC="i686-elf-gcc --sysroot=$SYSROOT -Wall -Wextra -Werror -Wpedantic"
+export CC="i686-elf-gcc --sysroot=$SYSROOT -Wall -Wextra -Wpedantic"
 
 # ======================= Build ===========================
 

@@ -1,15 +1,22 @@
-/* This file is part of ByteOS, (©) Guilherme Oliveira Santos
+/* This file is part of ByteOS.
+    Copyright (C) 2024 Guilherme Oliveira Santos
     This is free software: you can redistribute it and/or modify it 
-    under the terms of the GNU GPL3 or (at your option) any later version.  */
+    under the terms of the GNU GPL3 or (at your option) any later version. 
+	
+	* File: shell.c 
+	* Description: kernel builtin shell
+*/
 
 #include "shell.h"
+
+#include <fs/ramfs.h>
+#include <limits.h>
 
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
 #include <types.h>
 
-/* Return the number of builtins shell commands */
 size_t num_builtins(void);
 
 /* Shell command handler */
@@ -26,6 +33,9 @@ void shell_help(char** args);
 void shell_status(char** args);
 void shell_color(char** args);
 void shell_date(char** args);
+void shell_ls(char** args);
+void shell_touch(char** args);
+void shell_cat(char** args);
 
 char* builtin_str[] = {
     "poweroff",
@@ -35,6 +45,9 @@ char* builtin_str[] = {
     "status",
     "color",
     "date",
+    "ls",
+    "touch",
+    "cat"
 };
 
 char* builtin_desc[] = {
@@ -45,6 +58,9 @@ char* builtin_desc[] = {
     "Show the status of the system",
     "Change the color of the shell",
     "Show the current date",
+    "List files",
+    "Create a new file"
+    "Show file content"
 };
 
 void (*builtin_func[]) (char**) = {
@@ -54,21 +70,31 @@ void (*builtin_func[]) (char**) = {
     &shell_help,
     &shell_status,
     &shell_color,
-    &shell_date
+    &shell_date,
+    &shell_ls,
+    &shell_touch,
+    &shell_cat,
 };
+
+char * getTime(void){
+    static tm time;
+    gmtime(&time);
+    
+    return time.time_str;
+    
+}
+
 
 // Clear the screen and show the OS prompt
 void shell_initialize(void) {
     
-    printf("\n          Welcome to Byte%sOS%s | ", "\033[92m", "\033[37m");
+    printf("\n          Welcome to Byte%sOS%s | ", "\033[92m", "\033[37m\n");
     shell_date(NULL);
-
+    printf("\n");
     while (1) {
-        char buffer[256];
-        
-        printf("\n");
-        printf("root@%skernel%s:$/ ", "\033[92m", "\033[37m");
+        char buffer[U8_MAX];
 
+        printf("[%s] root@%skernel%s:$/ ", getTime(), "\033[92m", "\033[37m");
         scanf("%i", &buffer);
         shell(buffer);
     }
@@ -79,7 +105,6 @@ size_t num_builtins() {
 }
 
 void shell(char* command) {
-    printf("\n");
     char** args = split_str(command, ' ');
     command = args[0];
     char** arguments = args + 1;    
@@ -108,27 +133,77 @@ void shell_exit(char** args) {
     printf("Shutting down the kernel...\n");
 }
 
+
 void shell_echo(char** args) {
+    if (args[0] == NULL) {
+        return; // No arguments
+    }
+    
+    if (strcmp(args[0], ">>") == 0) {
+        char str[MAX_FILE_SIZE] = {0};
+        size_t current_length = 0;
+
+        u8 i = 1; // Start from the second argument
+        while (args[i] != NULL) {
+            size_t arg_length = strlen(args[i]);
+            
+            if (current_length + arg_length + 1 >= MAX_FILE_SIZE) {
+                printf("String too long\n");
+                return;
+            }
+
+            strncpy(str + current_length, args[i], arg_length);
+            current_length += arg_length;
+
+            if (args[i + 1] != NULL) {
+                str[current_length] = ' ';
+                current_length++;
+            }
+
+            i++;
+        }
+
+        str[current_length] = '\0'; // Null-terminate the final string
+
+        File* file = ramfs_find_file(args[1]);
+        if (file == NULL) {
+            printf("File not found: %s\n", args[1]);
+            return;
+        }
+
+        ramfs_write_file(file, (const u8*)str, strlen(str));
+
+        return;
+    }
+
+    // Print all arguments if not using the redirection operator
     while (*args) {
         printf("%s ", *args);
         args++;
     }
+    printf("\n"); // Add a newline at the end
 }
+
+
 
 void shell_clear(char** args) {
     terminal_clear_all();
 }
 
 void shell_help(char** args){
-    u8 description = strcmp(args[0], "-d");
-    description == 0 ? printf("Available commands:\n") : printf("Available commands (use -d to show more):\n");    
-    printf("\n");
-        
+    u8 description = strcmp(args[0], "--verbose");
+    description == 0 ? printf("Available commands:\n") : printf("There is no help in the void. " 
+    "Joking, use --verbose to show.\n");    
+
+    if (description) {
+        return;
+    }
+
     for (u8 i = 0; i < num_builtins(); i++) {
-        printf("| %s", builtin_str[i]);
+        printf("%s", builtin_str[i]);
         
         if (!description) {
-            printf("\t | %s", builtin_desc[i]);
+            printf(":\t%s", builtin_desc[i]);
         }
         printf("\n");
     }
@@ -150,8 +225,24 @@ void shell_date(char** args){
     time.date_str = date_buffer;
     time.time_str = time_buffer;
     gmtime(&time);
+    
+    if (args[0] == NULL){
+        
+    }
     printf("Date: %s | Time UTC: %s\n", time.date_str, time.time_str);
     
+}
+
+void shell_ls(char** args){
+    ramfs_ls();
+}
+
+void shell_touch(char** args){
+    ramfs_create_file(args[0], U8_MAX);
+}
+
+void shell_cat(char** args){
+    ramfs_cat(args[0]);
 }
 
 #pragma GCC diagnostic pop
