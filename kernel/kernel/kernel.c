@@ -19,8 +19,6 @@
 #define INIT_SUCESS 	0 
 #define INIT_FAILURE 	1
 
-PRIVATE KHEAPBM			kheap;
-
 PRIVATE void kernel_debug(char* str, int status){
 	switch (status) {
 
@@ -41,17 +39,15 @@ PRIVATE void kernel_debug(char* str, int status){
 
 /* Initialize adding block to heap, (1MB mark and length of 1MB) 
 with default block size of 16 bytes */
-PRIVATE u8 heap_initialization(void){    
-	k_heap_init(&kheap);
-	k_add_block(&kheap, 0x10000, 0x100000, 16);
-
-	char *ptr = (char*)k_malloc(&kheap, sizeof(char) * 10); 
+PRIVATE u8 heap_initialization(void){  
+	kernelHeapInit();  	
+	char *ptr = (char*)kMalloc(sizeof(char) * 5); 
 	for (u8 i = 0; i < 10; i++) {
 		ptr[i] = i + '0';
 	}     
 
 	if (strcmp(ptr, "0123456789") == 0){
-		k_free(&kheap, ptr);
+		kFree(ptr);
 		return INIT_SUCESS;
 	}
 	
