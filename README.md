@@ -58,13 +58,13 @@ For detailed instructions on building and using a cross-compiler, refer to the [
 
 #### 2. Write a Bootloader
 - [X] Develop a minimal bootloader 
-- [X] Load the kernel from disk
-- [ ] Enable paging
+- [X] Tells GRUB to load the kernel from disk
+- [X] Enable paging
 
 #### 3. Kernel Initialization
 - [X] Write the kernel in C or assembly
 - [X] Implement basic memory management (GDT, IDT)
-- [ ] Handle bootloader to kernel transition
+- [X] Handle bootloader to kernel transition
 - [ ] Set up the stack and clear BSS section
 
 #### 4. Paging and Virtual Memory

@@ -19,6 +19,58 @@ stack_bottom:
 .skip 16384 # 16 KiB
 stack_top:
 
+.text
+.globl loadPageDirectory
+loadPageDirectory:
+push %ebp
+mov %esp, %ebp
+mov 8(%esp), %eax
+mov %eax, %cr3
+mov %ebp, %esp
+pop %ebp
+ret
+
+.text
+.globl enablePaging
+enablePaging:
+push %ebp
+mov %esp, %ebp
+mov %cr0, %eax
+or $0x80000000, %eax
+mov %eax, %cr0
+mov %ebp, %esp
+pop %ebp
+ret
+
+
+.section .init
+.global _init
+.type _init, @function
+_init:
+	push %ebp
+	movl %esp, %ebp
+	/* gcc will nicely put the contents of crtbegin.o's .init section here. */
+
+.section .fini
+.global _fini
+.type _fini, @function
+
+_fini:
+	push %ebp
+	movl %esp, %ebp
+	/* gcc will nicely put the contents of crtbegin.o's .fini section here. */
+
+.section .init
+	/* gcc will nicely put the contents of crtend.o's .init section here. */
+	popl %ebp
+	ret
+
+.section .fini
+	/* gcc will nicely put the contents of crtend.o's .fini section here. */
+	popl %ebp
+	ret
+
+
 # The kernel entry point.
 .section .text
 .global _start
