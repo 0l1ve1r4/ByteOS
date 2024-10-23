@@ -22,6 +22,12 @@
 #define BACKSPACE_KEY_CODE      0x0E
 #define LSHIFT_KEY_CODE         0x2A
 
+#define UP_ARROW_KEY_CODE       0x48
+#define DOWN_ARROW_KEY_CODE     0x50
+#define LEFT_ARROW_KEY_CODE     0x4B
+#define RIGHT_ARROW_KEY_CODE    0x4D
+
+
 /* Internal Functions */
 void read_input(char *buffer, size_t max_length);
 void write_eoi(void);
@@ -192,6 +198,12 @@ void keyboard_scanf(char *buffer) {
             if (keycode < 0) {
                 continue;
             }
+
+            else if (keycode == UP_ARROW_KEY_CODE){
+                buffer[0] = '\0';
+                return;
+            }
+
             handle_keycode(keycode);
         }
     }  

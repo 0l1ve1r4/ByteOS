@@ -84,19 +84,37 @@ char * getTime(void){
     
 }
 
+static char history[1][U8_MAX];
+
+void add_to_history(const char* command) {
+    strncpy(history[0], command, U8_MAX - 1);
+}
 
 // Clear the screen and show the OS prompt
 void shell_initialize(void) {
     
-    printf("\n          Welcome to Byte%sOS%s | ", "\033[92m", "\033[37m\n");
-    shell_date(NULL);
+    printf("\n============= Welcome to Byte%sOS%s | "
+            "Developed By Guilherme %s0l1ve1r4%s =============\n",
+            "\033[92m", "\033[37m",
+            "\033[92m", "\033[37m");
     printf("\n");
     while (1) {
         char buffer[U8_MAX];
 
-        printf("[%s] root@%skernel%s:$/ ", getTime(), "\033[92m", "\033[37m");
-        scanf("%i", &buffer);
-        shell(buffer);
+        printf("[%s] root@%skernel%s:$/ ", getTime(), 
+                             "\033[92m", "\033[37m");
+
+        if (scanf("%i", &buffer) == -1){
+                strncpy(buffer, history[0], U8_MAX - 1);
+                buffer[U8_MAX - 1] = '\0'; // Ensure null termination
+                printf("%s\n", buffer);
+                shell(buffer);
+            }
+
+            else {
+            add_to_history(buffer);
+            shell(buffer);
+            }
     }
 } 
 

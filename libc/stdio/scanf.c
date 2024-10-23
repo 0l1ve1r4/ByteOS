@@ -11,7 +11,13 @@ int scanf(const char *format, ...){
     va_start(parameters, format);
     
     char * buffer = (char *) va_arg(parameters, char*);
+    
     keyboard_scanf(buffer);
+
+    if (buffer[0] == '\0'){
+        // UP ARROW
+        return -1;
+    }
 
     return 0;
     

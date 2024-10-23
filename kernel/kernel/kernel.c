@@ -17,7 +17,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <shell.h>
+#include <kernel/shell.h>
 #include <string.h>
 
 #if !defined(__i386__)

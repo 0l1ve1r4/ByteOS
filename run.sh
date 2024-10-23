@@ -5,12 +5,12 @@
 # Remember to add your cross compiler on your ~/.bashrc or ~/.profile
 # export PATH="$HOME/opt/cross/bin:$PATH"
 
-DEFAULT_TARGET=i686-elf
+DEFAULT_TARGET=i386-elf
 
 # ======================= Arguments =======================
 
 ARG1=$1 # build, clean, run, host, target
-ARG2=$2 # i686-elf, x86_64-elf, etc.
+ARG2=$2 # i386-elf, x86_64-elf, etc.
 
 # ======================= Fast Returns ====================
 
@@ -48,7 +48,7 @@ export INCLUDEDIR=$PREFIX/include
 export CFLAGS='-O2 -g'
 export CPPFLAGS=''
 export SYSROOT="$HOME/sysroot"
-export CC="i686-elf-gcc --sysroot=$SYSROOT -Wall -Wextra -Wpedantic"
+export CC="i386-elf-gcc --sysroot=$SYSROOT -Wall -Wextra -Wpedantic"
 
 # ======================= Build ===========================
 
