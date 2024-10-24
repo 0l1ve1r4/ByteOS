@@ -11,6 +11,7 @@
 #include <limits.h>
 #include <fs/ramfs.h>
 #include <kernel/shell.h>
+#include <gui/gameEngine.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -23,7 +24,7 @@ size_t num_builtins(void);
 void shell(char* command);
 
 /* defined at kernel/tty for clear built-in*/
-extern void terminal_clear_all(void);
+extern void terminalClearAll(void);
 
 /* Commands */
 void shell_exit(char** args);
@@ -48,6 +49,7 @@ char* builtin_str[] = {
     "ls",
     "touch",
     "cat",
+    "pong",
 };
 
 char* builtin_desc[] = {
@@ -61,7 +63,50 @@ char* builtin_desc[] = {
     "List files",
     "Create a new file",
     "Show file content",
+    ":)"
 };
+
+// Test function for the library
+static void libTest(void) {
+    terminalClearAll();
+    
+    u8 ballX = 80/2, ballY = 25/2;
+    
+    bool isRight  = true;
+    bool isDown   =  true;
+
+    Player_t *ball = newPlayer(ballX, ballY, RED_PIXEL, 1);
+    
+    Player_t *bot = newPlayer(SCREEN_WIDTH - 1, 25/2, WHITE_PIXEL, 3);
+
+    Player_t *player = newPlayer(1, 25/2, WHITE_PIXEL, 3);
+
+    while (1) { 
+        if (ballX >= 70) {
+            if (checkCollision(ball, bot)) isRight = false;
+        }
+
+        else if (ballX <= 0){ 
+            if (checkCollision(ball, player)) isRight = true;
+        }
+        if (ballY >= 25) isDown = false;
+        else if (ballY <= 0) isDown = true;
+
+        if (isRight) ballX++;
+        else ballX--;
+        
+        if (isDown) ballY++;
+        else ballY--;
+
+        ball->update(ball, ballX, ballY);
+        
+        bot->update(bot, bot->pos.x, ballY);
+
+        player->update(player, player->pos.x, ballY);
+
+        sleep(50000000); 
+    }
+}
 
 void (*builtin_func[]) (char**) = {
     &shell_exit,
@@ -74,6 +119,8 @@ void (*builtin_func[]) (char**) = {
     &shell_ls,
     &shell_touch,
     &shell_cat,
+    &libTest,
+
 };
 
 char * getTime(void){
@@ -205,7 +252,7 @@ void shell_echo(char** args) {
 
 
 void shell_clear(char** args) {
-    terminal_clear_all();
+    terminalClearAll();
 }
 
 void shell_help(char** args){

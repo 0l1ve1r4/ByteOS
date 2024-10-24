@@ -23,37 +23,33 @@ enum vga_color {
 	VGA_COLOR_WHITE = 0x0F,
 };
 
-/* Set the text color based on the 0x0F VGA color scheme */
-void set_text_color(u8 color);
+void setTextColor(u8 color);
 
-/* Set the background color based on the 0x0F VGA color scheme */
-void set_bg_color(u8 color);
+void setBgColor(u8 color);
 
 /* Initialize the terminal */
 u8 init_tty(void);
 
-/* Insert a char in the current VGA buffer */
-void terminal_putchar(char c);
+void terminalPutchar(char c);
 
 /* Write a string to the terminal */
-void terminal_write(const char* data, size_t size);
+void terminalWrite(const char* data, size_t size);
 
-/* Go to the next row */
-void terminal_newline(void);
+void terminalNewLine(void);
 
-/* Clear the terminal */
-void terminal_clear_all(void);
+void terminalClearAll(void);
 
-/* Clear a character */
-void terminal_clear_char(int size);
+/* Clear the size character(s) */
+void terminalClearChar(int size);
 
-/* Hide the VGA cursor */
-void hide_vga_cursor(void);
+void hideVgaCursor(void);
 
-/* Show the VGA cursor */
-void show_vga_cursor(void);
+void showVgaCursor(void);
 
-/* Update the VGA cursor */
-void update_vga_cursor(u16 pos);
+void updateVgaCursor(u16 pos);
+
+void drawPixel(u16 x, u16 y, char pixel_char, u8 color);
+
+u8 getTerminalBgColor(void);
 
 #endif

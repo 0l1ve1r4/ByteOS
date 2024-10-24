@@ -14,6 +14,8 @@
 #include <drivers/rtc.h>
 #include <kernel/heap.h>
 #include <fs/ramfs.h>
+#include <gui/gameEngine.h>
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -117,8 +119,6 @@ PUBLIC void kernel_main(void) {
 
 	kernel_debug("RAM Filesystem", ramfs_init());
 
-
     shell_initialize();
-
 
 }

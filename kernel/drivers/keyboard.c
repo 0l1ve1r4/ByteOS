@@ -128,7 +128,7 @@ void handle_enter_key(void) {
     input_buffer_index = 0;
 
     if (in_scanf){
-        terminal_newline();  
+        terminalNewLine();  
         in_scanf = false;
     }
     
@@ -141,7 +141,7 @@ void handle_backspace_key(void) {
     input_buffer_index--;
 
     if (in_scanf) {
-        terminal_clear_char(1);
+        terminalClearChar(1);
     }
 }
 
@@ -167,7 +167,7 @@ void handle_default_key(char keycode) {
 
     input_buffer[input_buffer_index++] = c;
     if (in_scanf) {
-        terminal_putchar(c);
+        terminalPutchar(c);
     }
 
 }

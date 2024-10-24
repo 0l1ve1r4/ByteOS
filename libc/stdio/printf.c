@@ -10,7 +10,7 @@
 #endif
 
 static void printl(void) {
-		terminal_newline();	
+		terminalNewLine();	
 }
 
 const char* ansicolors[] = {
@@ -50,7 +50,7 @@ void verify_ansi_colors(const unsigned char* format) {
     // Check if the ANSI code is valid
     for (int i = 0; i < 16; i++) {
         if (strcmp(ansi_code, ansicolors[i]) == 0) {
-            set_text_color(i);
+            setTextColor(i);
             return;
         }
     }
