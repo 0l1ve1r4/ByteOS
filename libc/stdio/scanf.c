@@ -3,8 +3,6 @@
 #include <string.h>
 #include <drivers/keyboard.h>
 
-#define MAX_INPUT 255
-
 /* TODO: Make a better implementation */
 int scanf(const char *format, ...){
     va_list parameters;
@@ -15,10 +13,7 @@ int scanf(const char *format, ...){
     keyboard_scanf(buffer);
 
     if (buffer[0] == '\0'){
-        // UP ARROW
         return -1;
     }
-
-    return 0;
-    
+    return 0;    
 }

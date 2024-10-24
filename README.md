@@ -17,7 +17,15 @@
 
 #### [Click here to be redirected to the wiki](https://github.com/iyksh/ByteOS/wiki) 
 
----
+<div style="display: flex; align-items: center;">
+  <img src="res/pong.gif" alt="pong" style="width: 40%;">
+
+  <div style="margin-left: 20px;">
+    > Be me<br>
+    > Create pong on my OS<br>
+    > lose for 2 minutes in a row at pong for the bot you created
+  </div>
+</div>
 
 ## Installation
 
@@ -121,7 +129,7 @@ For detailed instructions on building and using a cross-compiler, refer to the [
 - [X] Add support for last command completion
 - [ ] Add support for command history
 - [ ] Add support for tab completion
-
+- [X] Add a graphical user interface in VGA Text-mode 
 
 #### 14. Advanced Features (Optional)
 - [ ] Add networking support (TCP/IP stack)

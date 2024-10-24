@@ -172,7 +172,6 @@ void handle_default_key(char keycode) {
 
 }
 
-
 // Reads a line of input from the keyboard buffer
 void read_input(char *buffer, size_t max_length) {
     size_t index = 0;
@@ -186,12 +185,30 @@ void read_input(char *buffer, size_t max_length) {
 }
 
 
+/* Do not wait enter, just returns. */
+u8 keyboardDriverGetChar(void) {
+    u8 status = read_keyboard_status();
+    if (status & 0x01) {
+        char keycode = read_keycode();
+        if (keycode < 0) {
+            return '\0';
+        }
+        u8 c;
+        
+        if (lshift) c = characterTableShift[(u8)keycode];
+        else c = characterTable[(u8)keycode];
+        if (capslock) c -= 32;
+        return c;
+    }
+
+    return '\0';
+}
+
 // Waits the user to press Enter and stores the input in the buffer
 void keyboard_scanf(char *buffer) {
     in_scanf = true;
 
-    // Wait for Enter key press
-    while (in_scanf) {
+    do {
         u8 status = read_keyboard_status();
         if (status & 0x01) {
             char keycode = read_keycode();
@@ -199,14 +216,10 @@ void keyboard_scanf(char *buffer) {
                 continue;
             }
 
-            else if (keycode == UP_ARROW_KEY_CODE){
-                buffer[0] = '\0';
-                return;
-            }
-
             handle_keycode(keycode);
         }
-    }  
+    } while (in_scanf);
+      
     // Copy the input buffer to the provided buffer
     read_input(buffer, U8_MAX);
 }

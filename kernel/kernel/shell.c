@@ -37,6 +37,7 @@ void shell_date(char** args);
 void shell_ls(char** args);
 void shell_touch(char** args);
 void shell_cat(char** args);
+void shell_pong(char** args);
 
 char* builtin_str[] = {
     "poweroff",
@@ -63,50 +64,8 @@ char* builtin_desc[] = {
     "List files",
     "Create a new file",
     "Show file content",
-    ":)"
+    "A Simple \"tennis like\" game"
 };
-
-// Test function for the library
-static void libTest(void) {
-    terminalClearAll();
-    
-    u8 ballX = 80/2, ballY = 25/2;
-    
-    bool isRight  = true;
-    bool isDown   =  true;
-
-    Player_t *ball = newPlayer(ballX, ballY, RED_PIXEL, 1);
-    
-    Player_t *bot = newPlayer(SCREEN_WIDTH - 1, 25/2, WHITE_PIXEL, 3);
-
-    Player_t *player = newPlayer(1, 25/2, WHITE_PIXEL, 3);
-
-    while (1) { 
-        if (ballX >= 70) {
-            if (checkCollision(ball, bot)) isRight = false;
-        }
-
-        else if (ballX <= 0){ 
-            if (checkCollision(ball, player)) isRight = true;
-        }
-        if (ballY >= 25) isDown = false;
-        else if (ballY <= 0) isDown = true;
-
-        if (isRight) ballX++;
-        else ballX--;
-        
-        if (isDown) ballY++;
-        else ballY--;
-
-        ball->update(ball, ballX, ballY);
-        
-        bot->update(bot, bot->pos.x, ballY);
-
-        player->update(player, player->pos.x, ballY);
-
-        sleep(50000000); 
-    }
-}
 
 void (*builtin_func[]) (char**) = {
     &shell_exit,
@@ -119,7 +78,7 @@ void (*builtin_func[]) (char**) = {
     &shell_ls,
     &shell_touch,
     &shell_cat,
-    &libTest,
+    &shell_pong,
 
 };
 
@@ -308,6 +267,18 @@ void shell_touch(char** args){
 
 void shell_cat(char** args){
     ramfs_cat(args[0]);
+}
+
+void shell_pong(char** args){
+    if (pong()){
+        terminalClearAll();
+        printf("YOU WIN!\n");
+    }
+
+    else {
+        terminalClearAll();
+        printf("YOU LOSE!\n");
+    }
 }
 
 #pragma GCC diagnostic pop

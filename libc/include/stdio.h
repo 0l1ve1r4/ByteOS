@@ -10,6 +10,9 @@
 extern "C" {
 #endif
 
+
+u8 getchar(void);
+
 /* reads from the standard input stream stdin. */
 int scanf(const char *format, ...);
 
