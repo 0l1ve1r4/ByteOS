@@ -1,12 +1,28 @@
-/* This file is part of ByteOS.
-    Copyright (C) 2024 Guilherme Oliveira Santos
-    This is free software: you can redistribute it and/or modify it 
-    under the terms of the GNU GPL3 or (at your option) any later version. */
+//========================================================================
+//    This file is part of ByteOS.
+//    Copyright (C) 2024 Guilherme Oliveira Santos
+//    This is free software: you can redistribute it and/or modify it 
+//    under the terms of the GNU GPL3 or (at your option) any later version. 
+//	
+//	* File: .h 
+//	* Sources: 
+//	* Description:  
+//========================================================================
 
-#ifndef PORTS_H
-#define PORTS_H
+//========================================================================
+ 	                            #ifndef PORTS_H
+                                #define PORTS_H
+//========================================================================
+
+//========================================================================
+// 	                                INCLUDES
+//========================================================================
 
 #include <types.h>
+
+//========================================================================
+// 	                                FUNCIONS
+//========================================================================
 
 // Read from port function
 static inline u8 read_port(u16 port) {
@@ -51,4 +67,6 @@ static inline void outw(u16 port, u16 value) {
     __asm__ volatile ("outw %1, %0" : : "dN" (port), "a" (value));
 }
 
-#endif // PORTS_H
+//========================================================================
+ 	                                #endif
+//========================================================================

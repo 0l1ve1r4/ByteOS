@@ -1,5 +1,22 @@
-#ifndef TYPES_H
-#define TYPES_H
+//========================================================================
+//    This file is part of ByteOS.
+//    Copyright (C) 2024 Guilherme Oliveira Santos
+//    This is free software: you can redistribute it and/or modify it 
+//    under the terms of the GNU GPL3 or (at your option) any later version. 
+//	
+//	* File: types.h 
+//	* Sources: 
+//	* Description: Basic system types (names inspired by terry davis)  
+//========================================================================
+
+//========================================================================
+ 	                            #ifndef TYPES_H
+                                #define TYPES_H
+//========================================================================
+
+//========================================================================
+// 	                                DEFINES
+//========================================================================
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
@@ -24,4 +41,6 @@ typedef unsigned long       uintptr_t;
 #define false               0
 #define true                1
 
-#endif /* TYPES_H */
+//========================================================================
+ 	                                #endif
+//========================================================================

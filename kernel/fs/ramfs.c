@@ -1,29 +1,29 @@
-#include <fs/ramfs.h>
+#include <fs/tmpfs.h>
 #include <kernel/heap.h>
 #include <string.h>
 #include <stdio.h>
 
-static RamFs ramfs;
+static TmpFs tmpfs;
 
 u8 ramfs_init(void) {
-    ramfs.root.file_count = 0;
+    tmpfs.root.file_count = 0;
     for (int i = 0; i < MAX_FILES; i++) {
-        ramfs.root.files[i] = NULL;
+        tmpfs.root.files[i] = NULL;
     }
 
     return 0;
 }
 
 File* ramfs_create_file(const char* name, u32 size) {
-    if (ramfs.root.file_count >= MAX_FILES) {
-        printf("[ramfs.c]: No space for more files\n");
+    if (tmpfs.root.file_count >= MAX_FILES) {
+        printf("[tmpfs.c]: No space for more files\n");
         return NULL;
     }
 
 
     File* file = (File*)kMalloc(sizeof(File));
     if (!file) {
-        printf("[ramfs.c]: Failed to allocate file structure\n");
+        printf("[tmpfs.c]: Failed to allocate file structure\n");
         return NULL;  
     }
 
@@ -33,18 +33,18 @@ File* ramfs_create_file(const char* name, u32 size) {
 
     file->data = (u8*)kMalloc(size);  
     if (!file->data) {
-        printf("[ramfs.c]: File data allocation fails\n");
+        printf("[tmpfs.c]: File data allocation fails\n");
         kFree(file);  
         return NULL;
     }
 
-    ramfs.root.files[ramfs.root.file_count++] = file;
+    tmpfs.root.files[tmpfs.root.file_count++] = file;
     return file;
 }
 
 int ramfs_write_file(File* file, const u8* data, u32 size) {
     if (file == NULL || size > file->size) {
-        printf("[ramfs.c]: Invalid file or size too large\n");
+        printf("[tmpfs.c]: Invalid file or size too large\n");
         return -1;  
     }
 
@@ -55,7 +55,7 @@ int ramfs_write_file(File* file, const u8* data, u32 size) {
 
 int ramfs_read_file(File* file, u8* buffer, u32 size) {
     if (file == NULL || size > file->size) {
-        printf("[ramfs.c]: Invalid file or size too large\n");
+        printf("[tmpfs.c]: Invalid file or size too large\n");
         return -1;
     } 
 
@@ -64,41 +64,41 @@ int ramfs_read_file(File* file, u8* buffer, u32 size) {
 }
 
 int ramfs_delete_file(const char* name) {
-    for (u32 i = 0; i < ramfs.root.file_count; i++) {
-        if (strcmp(ramfs.root.files[i]->name, name) == 0) {
-            kFree(ramfs.root.files[i]->data);  
-            kFree(ramfs.root.files[i]);        
+    for (u32 i = 0; i < tmpfs.root.file_count; i++) {
+        if (strcmp(tmpfs.root.files[i]->name, name) == 0) {
+            kFree(tmpfs.root.files[i]->data);  
+            kFree(tmpfs.root.files[i]);        
 
             // Shift remaining files to maintain compact file array
-            for (u32 j = i; j < ramfs.root.file_count - 1; j++) {
-                ramfs.root.files[j] = ramfs.root.files[j + 1];
+            for (u32 j = i; j < tmpfs.root.file_count - 1; j++) {
+                tmpfs.root.files[j] = tmpfs.root.files[j + 1];
             }
-            ramfs.root.file_count--;
+            tmpfs.root.file_count--;
             return 0;
         }
     }
 
-    printf("[ramfs.c]: File not found\n");
+    printf("[tmpfs.c]: File not found\n");
     return -1;  
 }
 
 void ramfs_ls() {
-    if (ramfs.root.file_count == 0) {
+    if (tmpfs.root.file_count == 0) {
         printf("No files in directory.\n");
         return;
     }
 
-    printf("Total: %i\n", ramfs.root.file_count);
+    printf("Total: %i\n", tmpfs.root.file_count);
     printf("FILE \t CREATOR \t SIZE (B) \t CREATION \n");
-    for (u32 i = 0; i < ramfs.root.file_count; i++) {
+    for (u32 i = 0; i < tmpfs.root.file_count; i++) {
         printf("%s \t root \t %i \t NULL\n", 
-            ramfs.root.files[i]->name, ramfs.root.files[i]->size);
+            tmpfs.root.files[i]->name, tmpfs.root.files[i]->size);
     }
 }
 
 void ramfs_cat(const char* name) {
-    for (u32 i = 0; i < ramfs.root.file_count; i++) {
-        File* file = ramfs.root.files[i];
+    for (u32 i = 0; i < tmpfs.root.file_count; i++) {
+        File* file = tmpfs.root.files[i];
         if (strcmp(file->name, name) == 0) {
             printf("%s\n", file->data);
             return;
@@ -108,9 +108,9 @@ void ramfs_cat(const char* name) {
 }
 
 File* ramfs_find_file(const char* name) {
-    for (u32 i = 0; i < ramfs.root.file_count; i++) {
-        if (strcmp(ramfs.root.files[i]->name, name) == 0) {
-            return ramfs.root.files[i];
+    for (u32 i = 0; i < tmpfs.root.file_count; i++) {
+        if (strcmp(tmpfs.root.files[i]->name, name) == 0) {
+            return tmpfs.root.files[i];
         }
     }
     return NULL;  // File not found

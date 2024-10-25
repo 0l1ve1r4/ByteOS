@@ -5,21 +5,19 @@
 //    This is free software: you can redistribute it and/or modify it 
 //    under the terms of the GNU GPL3 or (at your option) any later version. 
 //	
-//	* File: rtc.h 
-//	* Sources: missing
-//	* Description: Real Time Clock Driver
+//	* File: pit.h 
+//	* Sources: https://wiki.osdev.org/Programmable_Interval_Timer
+//	* Description: Programmable Interval Timer
 //========================================================================
 
 //========================================================================
- 	                            #ifndef RTC_H
-                                #define RTC_H
+ 	                            #ifndef PIT_H
+                                #define PIT_H
 //========================================================================
 
 //========================================================================
-// 	                                INCLUDES                            
+// 	                                INCLUDES
 //========================================================================
-
-#include <types.h>
 
 //========================================================================
 // 	                                DEFINES
@@ -33,27 +31,10 @@
 // 	                                STRUCTS
 //========================================================================
 
-struct rtc_time {
-	int tm_sec;
-	int tm_min;
-	int tm_hour;
-	int tm_mday;
-	int tm_mon;
-	int tm_year;
-	int tm_wday;
-	int tm_yday;
-	int tm_isdst;
-};
-
 //========================================================================
 // 	                                FUNCIONS
 //========================================================================
 
-u8 rtc_initialize(void);
-
-const char* get_date(void);
-
-const char* get_time(void);
 
 //========================================================================
  	                                #endif

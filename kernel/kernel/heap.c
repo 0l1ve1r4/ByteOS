@@ -8,11 +8,19 @@
 	* Sources: https://wiki.osdev.org/User:Pancakes/BitmapHeapImplementation
 */
 
+/*========================================================================
+# 	Includes
+========================================================================*/
+
 #include <stddef.h>
 #include <types.h>
 #include <string.h>
 #include <stdio.h>
 #include <kernel/heap.h>
+
+/*========================================================================
+# 	Defines
+========================================================================*/
 
 #define HEAP_SIZE 1024 * 1024  // 1 MB heap
 #define BLOCK_SIZE 32          // Block size of 32 bytes
@@ -24,9 +32,22 @@ static u8 heap[HEAP_SIZE];       // The actual heap memory
 static u8 bitmap[BITMAP_SIZE];   // Bitmap to track free/used blocks
 
 /* Initialize bitmap to zero (all blocks are free) */
-void initHeap(void) {
+u8 initHeap(void) {
     memset(bitmap, 0, sizeof(bitmap));  
+
+	char *ptr = (char*)kMalloc(32); 
+	for (u8 i = 0; i < 33; i++) {
+		if (i < 32 && ptr[i] != ALLOCATION_REPRESENTATION) {
+			printf("SOMETHING WENT WRONG WITH MALLOC");
+			return 1;
+		}
+	}     
+
+	return 0;
+
 }
+
+
 
 static void setBit(int index, int value) {
     int byteIndex = index / 8;

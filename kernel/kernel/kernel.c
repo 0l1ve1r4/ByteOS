@@ -8,30 +8,52 @@
 	* Sources: 
 */
 
+/*========================================================================
+# 	Includes
+========================================================================*/
+
+/* Kernel */
 #include <kernel/tty.h>
 #include <kernel/x86.h>
+#include <kernel/heap.h>
+#include <kernel/shell.h>
+
+/* Drivers */
 #include <drivers/keyboard.h>
 #include <drivers/rtc.h>
-#include <kernel/heap.h>
-#include <fs/ramfs.h>
-#include <gui/gameEngine.h>
+#include <drivers/pit.h>
 
+/* Others */
+#include <fs/tmpfs.h>
+#include <gui/gaming.h>
 
+/* libc */
 #include <stdio.h>
 #include <stdlib.h>
-#include <kernel/shell.h>
 #include <string.h>
 
 #if !defined(__i386__)
 #error "Must be compiled with an ix86-elf compiler."
 #endif
 
-#define PUBLIC
-#define PRIVATE 		static
-#define INIT_SUCESS 	0 
-#define INIT_FAILURE 	1
 
-PRIVATE void kernel_debug(char* str, int status){
+/*========================================================================
+# 	Defines
+========================================================================*/
+
+#define INIT_SUCESS 	0x00 
+#define INIT_FAILURE 	0x01
+#define PIT_INTERVAL	0X3E8 /* 1 ms */
+
+/*========================================================================
+# 	Functions
+========================================================================*/
+
+/* boot.s*/
+extern void loadPageDirectory(unsigned int*);
+extern void enablePaging();
+
+static void kernel_debug(char* str, int status){
 	switch (status) {
 
 	case INIT_SUCESS:
@@ -49,27 +71,7 @@ PRIVATE void kernel_debug(char* str, int status){
 
 }
 
-/* Initialize adding block to heap, (1MB mark and length of 1MB) 
-with default block size of 16 bytes */
-PRIVATE u8 heap_initialization(void){  
-	initHeap();
-	char *ptr = (char*)kMalloc(32); 
-	for (u8 i = 0; i < 33; i++) {
-		if (i < 32 && ptr[i] != ALLOCATION_REPRESENTATION) {
-			printf("SOMETHING WENT WRONG WITH MALLOC");
-			return INIT_FAILURE;
-		}
-	}     
-
-	return INIT_SUCESS;
-
-}
-
-/* boot.s*/
-extern void loadPageDirectory(unsigned int*);
-extern void enablePaging();
-
-PRIVATE u8 pagingInitilization(void){
+static u8 pagingInitilization(void){
 	u32 page_directory[1024] __attribute__((aligned(4096)));
 	//set each entry to not present
 	for(u16 i = 0; i < 1024; i++)
@@ -99,25 +101,30 @@ PRIVATE u8 pagingInitilization(void){
 	return 0;
 }
 
+/*========================================================================
+# 	Main
+========================================================================*/
 
-PUBLIC void kernel_main(void) {
+void kernel_main(void) {
 	kernel_debug("Terminal initialization", init_tty());
 	
 	kernel_debug("Paging initialization", pagingInitilization());
 
 	kernel_debug("GDT initialization", 	init_GDT());
 		
-	kernel_debug("IDT initialization", init_IDT());
+	kernel_debug("IDT initialization", 	init_IDT());
 
-    kernel_debug("TSS initialization", init_TSS());
+    kernel_debug("TSS initialization", 	init_TSS());
 
-	kernel_debug("IRQ initialization", init_IRQ());
+	kernel_debug("IRQ initialization", 	init_IRQ());
 	
-	kernel_debug("RTC initialization", rtc_initialize());
+	kernel_debug("RTC initialization", 	rtc_initialize());
 
-	kernel_debug("Heap initialization", heap_initialization());
+	kernel_debug("PIT initialization", 	pitInitialize(PIT_INTERVAL));
 
-	kernel_debug("RAM Filesystem", ramfs_init());
+	kernel_debug("Heap initialization", initHeap());
+
+	kernel_debug("RAM Filesystem", 		ramfs_init());
 
     shell_initialize();
 

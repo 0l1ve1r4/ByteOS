@@ -1,24 +1,36 @@
-/* This file is part of ByteOS.
-    Copyright (C) 2024 Guilherme Oliveira Santos
-    This is free software: you can redistribute it and/or modify it 
-    under the terms of the GNU GPL3 or (at your option) any later version. 
-	
-	* File: heap.c 
-	* Description: Drawing a pseudo "pixels" in text mode using ASCII characters, to make games
-*/
+//========================================================================
+//    This file is part of ByteOS.
+//    Copyright (C) 2024 Guilherme Oliveira Santos
+//    This is free software: you can redistribute it and/or modify it 
+//    under the terms of the GNU GPL3 or (at your option) any later version. 
+//	
+//	* File: gaming.h 
+//	* Sources: 
+//	* Description: Basic VGA Pixel manipulation to do games  
+//========================================================================
 
-#include <kernel/tty.h> // DrawPixel, getBgColor
-#include <types.h>      // u8, u16, etc.
-#include <limits.h>     // MAX_U8
+//========================================================================
+ 	                            #ifndef GAMING_H
+                                #define GAMING_H
+//========================================================================
 
+//========================================================================
+// 	                                INCLUDES
+//========================================================================
+
+#include <kernel/tty.h>     // DrawPixel, getBgColor
 #include <kernel/heap.h>    // kmalloc
+
+#include <types.h>          // u8, u16, etc.
+#include <limits.h>         // MAX_U8
 #include <stdio.h>          // getch
 #include <time.h>           // sleep
 
-/* 
-these are VGA_COLORS defined at tty.h, 
-but with diferentes names to gave abstraction 
-*/
+//========================================================================
+// 	                                DEFINES
+//========================================================================
+
+// They are defined at tty.h, but with diferent names to gave abstraction 
 #define BLACK_PIXEL        0x00
 #define BLUE_PIXEL         0x01
 #define GREEN_PIXEL        0x02
@@ -39,6 +51,14 @@ but with diferentes names to gave abstraction
 #define SCREEN_WIDTH 75
 #define SCREEN_HEIGHT 25
 
+//========================================================================
+// 	                                ENUMS
+//========================================================================
+
+//========================================================================
+// 	                                STRUCTS
+//========================================================================
+
 typedef struct Pos {
     u8 x;
     u8 y;
@@ -49,6 +69,7 @@ typedef struct Size {
     u8 height;
 } Size;
 
+// Player is a rectangle :)
 typedef struct Player_t {
     Pos pos;
     u8 color;
@@ -59,14 +80,9 @@ typedef struct Player_t {
 } Player_t;
 
 
-/* This must be on tty.y
-void drawPixel(u16 x, u16 y, char c, u8 color) {
-    //terminal_putentryat(pixel_char, color, y, x);
-    const size_t index = y * VGA_WIDTH + x;
-    terminal_buffer[index] = vga_entry(c, color);    
-}
-
-*/
+//========================================================================
+// 	                                FUNCIONS
+//========================================================================
 
 /* Draw a pixel in the VGA TextMode interface */
 static void draw(Pos pos, u8 color) {
@@ -133,6 +149,11 @@ static bool checkCollision(Player_t *a, Player_t *b) {
     return false;
 }
 
+
+//========================================================================
+// 	                                GAMESSSSSS
+//========================================================================
+
 #pragma GCC diagnostic ignored "-Wunused-function"
 
 // returns true when win, 0 otherwise
@@ -152,9 +173,6 @@ static int pong() {
 
     bool isPlayerDown = false;
     bool isPlayerUp = false;
-
-    bool win = false;
-
     while (1) { 
         if (ballX >= 70) {
             if (checkCollision(ball, bot)) isRight = false;
@@ -203,3 +221,7 @@ static int pong() {
     }
 }
 #pragma GCC diagnostic pop
+
+//========================================================================
+ 	                                #endif
+//========================================================================

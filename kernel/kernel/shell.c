@@ -9,7 +9,7 @@
 
 
 #include <limits.h>
-#include <fs/ramfs.h>
+#include <fs/tmpfs.h>
 #include <kernel/shell.h>
 #include <gui/gameEngine.h>
 

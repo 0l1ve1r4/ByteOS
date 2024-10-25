@@ -1,8 +1,32 @@
-#ifndef _KERNEL_TTY_H
-#define _KERNEL_TTY_H
+//========================================================================
+//    This file is part of ByteOS.
+//    Copyright (C) 2024 Guilherme Oliveira Santos
+//    This is free software: you can redistribute it and/or modify it 
+//    under the terms of the GNU GPL3 or (at your option) any later version. 
+//	
+//	* File: tty.h 
+//	* Sources: 
+//	* Description: Video Driver     
+//========================================================================
+
+//========================================================================
+ 	                            #ifndef _KERNEL_TTY_H
+                                #define _KERNEL_TTY_H
+//========================================================================
+
+//========================================================================
+// 	                                INCLUDES
+//========================================================================
 
 #include <types.h>
 
+//========================================================================
+// 	                                DEFINES
+//========================================================================
+
+//========================================================================
+// 	                                ENUMS
+//========================================================================
 
 enum vga_color {
 	VGA_COLOR_BLACK = 0x00,
@@ -23,23 +47,28 @@ enum vga_color {
 	VGA_COLOR_WHITE = 0x0F,
 };
 
+//========================================================================
+// 	                                STRUCTS
+//========================================================================
+
+//========================================================================
+// 	                                FUNCIONS
+//========================================================================
+
 void setTextColor(u8 color);
 
 void setBgColor(u8 color);
 
-/* Initialize the terminal */
 u8 init_tty(void);
 
 void terminalPutchar(char c);
 
-/* Write a string to the terminal */
 void terminalWrite(const char* data, size_t size);
 
 void terminalNewLine(void);
 
 void terminalClearAll(void);
 
-/* Clear the size character(s) */
 void terminalClearChar(int size);
 
 void hideVgaCursor(void);
@@ -52,4 +81,6 @@ void drawPixel(u16 x, u16 y, char pixel_char, u8 color);
 
 u8 getTerminalBgColor(void);
 
-#endif
+//========================================================================
+ 	                                #endif
+//========================================================================
